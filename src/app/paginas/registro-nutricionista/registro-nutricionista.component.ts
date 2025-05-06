@@ -4,15 +4,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-registro-entrenador',
-  standalone:true,
+  selector: 'app-registro-nutricionista',
+  standalone: true,
   imports: [ReactiveFormsModule, HttpClientModule, CommonModule],
-  templateUrl: './registro-entrenador.component.html',
-  styleUrl: './registro-entrenador.component.css'
+  templateUrl: './registro-nutricionista.component.html',
+  styleUrls: ['./registro-nutricionista.component.css']
 })
-export class RegistroEntrenadorComponent implements OnInit {
+export class RegistroNutricionistaComponent implements OnInit {
 
-  registroEntrenadorForm!: FormGroup;
+  registroNutricionistaForm!: FormGroup;
   ciudades: any[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
@@ -25,7 +25,7 @@ export class RegistroEntrenadorComponent implements OnInit {
   }
 
   private crearFormulario() {
-    this.registroEntrenadorForm = this.fb.group({
+    this.registroNutricionistaForm = this.fb.group({
       usuarioId: ['', [Validators.required, Validators.maxLength(100)]],
       primerNombre: ['', [Validators.required, Validators.maxLength(100)]],
       segundoNombre: ['', [Validators.required, Validators.maxLength(100)]],
@@ -41,11 +41,10 @@ export class RegistroEntrenadorComponent implements OnInit {
   }
 
   public registrar() {
-    if (this.registroEntrenadorForm.invalid) return;
+    if (this.registroNutricionistaForm.invalid) return;
 
-    const formData = this.registroEntrenadorForm.value;
+    const formData = this.registroNutricionistaForm.value;
 
-    // Convertir string de teléfonos separados por comas a arreglo
     const telefonos = formData.telefonos
       .split(',')
       .map((tel: string) => tel.trim())
@@ -56,14 +55,14 @@ export class RegistroEntrenadorComponent implements OnInit {
       telefonos
     };
 
-    this.http.post('http://localhost:8080/api/entrenadores', payload)
+    this.http.post('http://localhost:8080/api/nutricionistas', payload)
       .subscribe({
         next: (respuesta) => {
-          console.log("Entrenador registrado", respuesta);
-          this.registroEntrenadorForm.reset();
+          console.log("Nutricionista registrado", respuesta);
+          this.registroNutricionistaForm.reset();
         },
         error: (error) => {
-          console.error("Error al registrar entrenador", error);
+          console.error("Error al registrar nutricionista", error);
         }
       });
   }
@@ -81,5 +80,4 @@ export class RegistroEntrenadorComponent implements OnInit {
         error: (error) => console.error("Error al obtener ciudades", error)
       });
   }
-
 }

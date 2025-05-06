@@ -1,6 +1,6 @@
-<form [formGroup]="registroEntrenadorForm" (ngSubmit)="registrar()" novalidate>
+<form [formGroup]="registroNutricionistaForm" (ngSubmit)="registrar()" novalidate>
     <div>
-      <label>Cédula :</label>
+      <label>Cédula:</label>
       <input type="text" formControlName="usuarioId" />
     </div>
   
@@ -23,25 +23,25 @@
       <label>Segundo Apellido:</label>
       <input type="text" formControlName="segundoApellido" />
     </div>
-
+  
     <div>
-        <label>Años de experiencia:</label>
-        <input type="number" formControlName="aniosExp" />
-      </div>
-    
-      <div>
-        <label>Teléfonos:</label>
-        <input type="text" formControlName="telefonos" placeholder="Separados por comas" />
-      </div>
-    
-      <div>
-        <label>Ciudad:</label>
-        <select formControlName="codCiudad">
-          <option *ngFor="let ciudad of ciudades" [value]="ciudad.codigo">
-            {{ ciudad.nombre }}
-          </option>
-        </select>
-      </div>
+      <label>Años de experiencia:</label>
+      <input type="number" formControlName="aniosExp" />
+    </div>
+  
+    <div>
+      <label>Teléfonos:</label>
+      <input type="text" formControlName="telefonos" placeholder="Separados por comas" />
+    </div>
+  
+    <div>
+      <label>Ciudad:</label>
+      <select formControlName="codCiudad">
+        <option *ngFor="let ciudad of ciudades" [value]="ciudad.codigo">
+          {{ ciudad.nombre }}
+        </option>
+      </select>
+    </div>
   
     <div>
       <label>Email:</label>
@@ -58,11 +58,9 @@
       <input type="password" formControlName="confirmarPassword" />
     </div>
   
-    <div *ngIf="registroEntrenadorForm.hasError('passwordsMismatch')">
+    <div *ngIf="registroNutricionistaForm.hasError('passwordsMismatch')">
       <p>Las contraseñas no coinciden</p>
     </div>
   
-    
-  
-    <button type="submit" [disabled]="registroEntrenadorForm.invalid">Registrar Entrenador</button>
+    <button type="submit" [disabled]="registroNutricionistaForm.invalid">Registrar Nutricionista</button>
   </form>
