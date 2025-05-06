@@ -1,14 +1,3 @@
-<header>
-  <p>Página inicial de {{ title }}</p>
-  <ul>
-    <li><a routerLink="">Inicio</a></li>
-    <li><a routerLink="/login">Login</a></li>
-    <li><a routerLink="/registroCliente">RegistroCliente</a></li>
-    <li><a routerLink="/registroEntrenador">RegistroEntrenador</a></li>
-    <li><a routerLink="/registroNutricionista">RegistroNutricionista</a></li>
- </ul>
- </header>
- <router-outlet></router-outlet>
- <footer>
-  <p>{{ footer }}</p>
- </footer>
+<app-header></app-header>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

@@ -1,91 +1,111 @@
-<form [formGroup]="registroClienteForm" (ngSubmit)="registrar()" novalidate="">
-    <div>
-        <label>Cedula:</label>
-        <input type="text" formControlName="usuarioId" />
-    </div>
-
-    <div>
-        <label>Primer Nombre:</label>
-        <input type="text" formControlName="primerNombre" />
-    </div>
-
-    <div>
-        <label>Segundo Nombre:</label>
-        <input type="text" formControlName="segundoNombre" />
-    </div>
-
-    <div>
-        <label>Primer Apellido:</label>
-        <input type="text" formControlName="primerApellido" />
-    </div>
-
-    <div>
-        <label>Segundo Apellido:</label>
-        <input type="text" formControlName="segundoApellido" />
-    </div>
-
-    <div>
-        <label>Fecha de Nacimiento:</label>
-        <input type="date" formControlName="fechaNacimiento" />
-    </div>
-
-    <div>
-        <label>Sexo:</label>
-        <select formControlName="sexo">
+<div class="container pt-5 pb-5">
+    <h5 class="mb-0">
+      <i class="fa-solid fa-user-plus me-3"></i>Crear cuenta
+    </h5>
+  
+    <hr />
+  
+    <div class="card-body">
+      <form class="row g-3" [formGroup]="registroClienteForm" (ngSubmit)="registrar()" novalidate>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Cédula:</label>
+          <input class="form-control" type="text" formControlName="usuarioId" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Primer Nombre:</label>
+          <input class="form-control" type="text" formControlName="primerNombre" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Segundo Nombre:</label>
+          <input class="form-control" type="text" formControlName="segundoNombre" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Primer Apellido:</label>
+          <input class="form-control" type="text" formControlName="primerApellido" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Segundo Apellido:</label>
+          <input class="form-control" type="text" formControlName="segundoApellido" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Fecha de Nacimiento:</label>
+          <input class="form-control" type="date" formControlName="fechaNacimiento" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Sexo:</label>
+          <select class="form-select" formControlName="sexo">
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
             <option value="Otro">Otro</option>
-        </select>
-    </div>
-
-    <div>
-        <label>Email:</label>
-        <input type="email" formControlName="email" />
-    </div>
-
-    <div>
-        <label>Teléfonos:</label>
-        <input type="text" formControlName="telefonos" placeholder="números separados por comas" />
-    </div>
-
-    <div>
-        <label>Ciudad:</label>
-        <select formControlName="codCiudad">
+          </select>
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Email:</label>
+          <input class="form-control" type="email" formControlName="email" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Teléfonos:</label>
+          <input class="form-control" type="text" formControlName="telefonos" placeholder="números separados por comas" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Ciudad:</label>
+          <select class="form-select" formControlName="codCiudad">
             <option *ngFor="let ciudad of ciudades" [value]="ciudad.id">
-                {{ ciudad.nombre }}
+              {{ ciudad.nombre }}
             </option>
-        </select>
-    </div>
-
-    <div>
-        <label>Historial Médico:</label>
-        <textarea formControlName="historialMedico"></textarea>
-    </div>
-
-    <div>
-        <label>Peso (kg):</label>
-        <input type="number" formControlName="peso" />
-    </div>
-
-    <div>
-        <label>Altura (cm):</label>
-        <input type="number" formControlName="altura" />
-    </div>
-
-    <div>
-        <label>Contraseña:</label>
-        <input type="password" formControlName="password" />
-    </div>
-
-
-    <div>
-        <label>Repetir contraseña: </label>
-        <input type="password" formControlName="confirmarPassword" />
-    </div>
-    
-    @if (registroClienteForm.hasError('passwordsMismatch')) {
-        <p>Las contraseñas no coinciden</p>
+          </select>
+        </div>
+  
+        <div class="col-12">
+          <label class="form-label">Historial Médico:</label>
+          <textarea class="form-control" formControlName="historialMedico" rows="3"></textarea>
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Peso (kg):</label>
+          <input class="form-control" type="number" formControlName="peso" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Altura (cm):</label>
+          <input class="form-control" type="number" formControlName="altura" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Contraseña:</label>
+          <input class="form-control" type="password" formControlName="password" />
+        </div>
+  
+        <div class="col-12 col-sm-6">
+          <label class="form-label">Repetir Contraseña:</label>
+          <input class="form-control" type="password" formControlName="confirmarPassword" />
+        </div>
+  
+        @if (registroClienteForm.hasError('passwordsMismatch')) {
+          <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+              Las contraseñas no coinciden
+            </div>
+          </div>
         }
-        
-    <button type="submit" [disabled]="registroClienteForm.invalid">Registrarse</button>
-   </form>
+  
+        <div class="col-12 text-center">
+          <button class="btn btn-primary" type="submit" [disabled]="registroClienteForm.invalid">
+            <i class="fa-solid fa-check me-2"></i>Registrarse
+          </button>
+        </div>
+  
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,133 @@
+<div class="container py-5" *ngIf="usuario">
+    <div class="d-flex align-items-center mb-4">
+      <i class="fa-solid fa-id-badge fa-2x text-black me-2"></i>
+      <h4 class="mb-0">Perfil del Cliente</h4>
+    </div>
+  
+    <div class="card shadow border-0">
+      <div class="card-body">
+        <div class="row g-4">
+          <!-- Cédula -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-id-card fa-fw me-2 text-secondary"></i>
+              <div>
+                <small class="text-muted">Cédula</small>
+                <div>{{ usuario.usuarioId }}</div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Nombre completo -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-user fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Nombre completo</small>
+                <div *ngIf="!editando">{{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }} {{ usuario.segundoApellido }}</div>
+                <div *ngIf="editando">
+                  <input [(ngModel)]="usuarioEditado.primerNombre" class="form-control mb-1" placeholder="Primer Nombre" />
+                  <input [(ngModel)]="usuarioEditado.segundoNombre" class="form-control mb-1" placeholder="Segundo Nombre" />
+                  <input [(ngModel)]="usuarioEditado.primerApellido" class="form-control mb-1" placeholder="Primer Apellido" />
+                  <input [(ngModel)]="usuarioEditado.segundoApellido" class="form-control" placeholder="Segundo Apellido" />
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Email -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-envelope fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Email</small>
+                <div>{{ usuario.email }}</div> <!-- No editable -->
+              </div>
+            </div>
+          </div>
+  
+          <!-- Sexo -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-venus-mars fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Sexo</small>
+                <div>{{ usuario.sexo }}</div> <!-- No editable -->
+              </div>
+            </div>
+          </div>
+  
+          <!-- Edad -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-birthday-cake fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Edad</small>
+                <div>{{ usuario.edad }} años</div> <!-- No editable -->
+              </div>
+            </div>
+          </div>
+  
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-phone fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Teléfonos</small>
+                <div *ngIf="!editando">
+                  <ul class="list-unstyled">
+                    <li *ngFor="let telefono of usuario.telefonos">{{ telefono }}</li>
+                  </ul>
+                </div>
+                <input *ngIf="editando" [(ngModel)]="telefonosString" class="form-control" placeholder="Separar por comas" />
+              </div>
+            </div>
+          </div>
+  
+          <!-- Peso -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-weight-scale fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Peso</small>
+                <div *ngIf="!editando">{{ usuario.peso }} kg</div>
+                <input *ngIf="editando" [(ngModel)]="usuarioEditado.peso" class="form-control" type="number" />
+              </div>
+            </div>
+          </div>
+  
+          <!-- Altura -->
+          <div class="col-md-6">
+            <div class="d-flex">
+              <i class="fa-solid fa-ruler-vertical fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Altura</small>
+                <div>{{ usuario.altura}}</div> <!-- No editable -->
+              </div>
+            </div>
+          </div>
+  
+          <!-- Historial Médico -->
+          <div class="col-12">
+            <div class="d-flex">
+              <i class="fa-solid fa-notes-medical fa-fw me-2 text-secondary"></i>
+              <div class="w-100">
+                <small class="text-muted">Historial Médico</small>
+                <div *ngIf="!editando">{{ usuario.historialMedico }}</div>
+                <textarea *ngIf="editando" [(ngModel)]="usuarioEditado.historialMedico" class="form-control" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Botones -->
+          <div class="col-12 mt-4">
+            <button *ngIf="!editando" class="btn btn-primary" (click)="activarEdicion()">Editar</button>
+            <div *ngIf="editando">
+              <button class="btn btn-success me-2" (click)="actualizarCliente()">Guardar</button>
+              <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
