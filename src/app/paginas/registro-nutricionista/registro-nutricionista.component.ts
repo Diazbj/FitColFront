@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 export class RegistroNutricionistaComponent implements OnInit {
 
   registroNutricionistaForm!: FormGroup;
-  ciudades: any[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.crearFormulario();
@@ -21,7 +20,6 @@ export class RegistroNutricionistaComponent implements OnInit {
 
   ngOnInit(): void {
     this.crearFormulario();
-    this.obtenerCiudades();
   }
 
   private crearFormulario() {
@@ -36,7 +34,6 @@ export class RegistroNutricionistaComponent implements OnInit {
       confirmarPassword: ['', [Validators.required]],
       aniosExp: [null],
       telefonos: ['', [Validators.required]],
-      codCiudad: ['', [Validators.required]]
     }, { validators: this.passwordsMatchValidator });
   }
 
@@ -71,13 +68,5 @@ export class RegistroNutricionistaComponent implements OnInit {
     const password = formGroup.get('password')?.value;
     const confirmarPassword = formGroup.get('confirmarPassword')?.value;
     return password === confirmarPassword ? null : { passwordsMismatch: true };
-  }
-
-  private obtenerCiudades() {
-    this.http.get<any[]>('http://localhost:8080/api/ciudades')
-      .subscribe({
-        next: (data) => this.ciudades = data,
-        error: (error) => console.error("Error al obtener ciudades", error)
-      });
   }
 }
