@@ -1,14 +1,24 @@
 <div class="container">
     <ul class="nav nav-tabs mt-3">
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'cliente'" (click)="selectedTab = 'cliente'">Cliente</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'entrenador'" (click)="selectedTab = 'entrenador'">Entrenador</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'nutricionista'" (click)="selectedTab = 'nutricionista'">Nutricionista</a>
-      </li>
+      @switch (rolActual) {
+        @case ("ROLE_CLIENTE") {
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="selectedTab === 'cliente'" (click)="selectedTab = 'cliente'">Cliente</a>
+          </li>
+        }
+        @case ("ROLE_ENTRENADOR") {
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="selectedTab === 'entrenador'" (click)="selectedTab = 'entrenador'">Entrenador</a>
+          </li>
+        }
+        @case ("ROLE_NUTRICIONISTA") {
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="selectedTab === 'nutricionista'" (click)="selectedTab = 'nutricionista'">Nutricionista</a>
+          </li>
+        }
+      }
+      
+      
     </ul>
   
     <!-- Mostrar dinámicamente cada formulario -->

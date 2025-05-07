@@ -1,19 +1,29 @@
 <header class="p-3 text-bg-dark">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a routerLink="/" class="d-flex align-items-center mb-2 me-2 mb-lg-0 text-white text-decoration-none">
-          <i class="fa-solid fa-dumbbell fs-3 me-2"></i> {{ title }}
-        </a>
-  
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a routerLink="/" class="nav-link px-2 text-secondary">Inicio</a></li>
-          <li><a routerLink="/perfil" class="nav-link px-2 text-secondary">Perfil</a></li>
-        </ul>
-  
-        <div class="text-end">
-          <button type="button" routerLink="/login" class="btn btn-outline-light me-2">Login</button>
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a routerLink="/" class="d-flex align-items-center mb-2 me-2 mb-lg-0 text-white text-decoration-none">
+        <i class="fa-solid fa-dumbbell fs-3 me-2"></i> {{ title }}
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a routerLink="/" class="nav-link px-2 text-secondary">Inicio</a></li>
+        <li><a routerLink="/perfil" class="nav-link px-2 text-secondary">Perfil</a></li>
+      </ul>
+
+      <div class="text-end">
+        <ng-container *ngIf="(isLoggedIn$ | async) === false">
+          <button type="button" routerLink="/login" class="btn btn-outline-light me-2">
+            <i class="fas fa-user"></i> Iniciar sesión
+          </button>
           <button type="button" routerLink="/registro" class="btn btn-primary">Registro</button>
-        </div>
+        </ng-container>
+
+        <ng-container *ngIf="(isLoggedIn$ | async) === true">
+          <button type="button" (click)="logout()" class="btn btn-danger">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+          </button>
+        </ng-container>
       </div>
     </div>
-  </header>
+  </div>
+</header>

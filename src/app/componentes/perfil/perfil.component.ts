@@ -23,7 +23,8 @@ export class PerfilComponent implements OnInit {
 
 ngOnInit() {
   this.clienteService.obtenerCliente().subscribe({
-    next: (cliente) => {
+    next: (res) => {
+      const cliente = res.mensaje;
       console.log("Cliente recibido:", cliente);
       this.usuario = cliente;
       this.usuarioEditado = this.mapClienteToEditarDTO(cliente);

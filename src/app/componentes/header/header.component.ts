@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../servicios/auth.service';
+import { RouterModule, Router } from '@angular/router'; 
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -11,4 +13,16 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   title = 'FitCol'; // ← Título personalizado para tu app
+  isLoggedIn$!: Observable<boolean>;
+
+  constructor(private auth: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    this.isLoggedIn$ = this.auth.isLoggedIn(); // Reactivo al cambio de estado
+  }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/']);
+  }
 }

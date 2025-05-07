@@ -6,6 +6,7 @@ import { ClienteDTO } from '../dto/cliente-dto';
 import { EditarClienteDTO } from '../dto/editar-cliente-dto';
 import { AuthService } from './auth.service';
 import { map } from 'rxjs/operators';
+import { MensajeDTO } from '../dto/mensaje-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,32 +19,33 @@ export class ClienteService {
 
 
   // Crear cliente
-  crearCliente(dto: CrearClienteDTO): Observable<any> {
-    return this.http.post(this.apiUrl, dto);
+  crearCliente(dto: CrearClienteDTO): Observable<MensajeDTO> {
+    return this.http.post<MensajeDTO>(this.apiUrl, dto);
   }
 
-  obtenerCliente(): Observable<ClienteDTO> {
+  obtenerCliente(): Observable<MensajeDTO> {
     const token = this.authService.getToken();
-    return this.http.get<{ error: boolean; mensaje: ClienteDTO }>('http://localhost:8080/api/clientes', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).pipe(
-      map((response: { error: boolean; mensaje: ClienteDTO }) => response.mensaje)
-    );
-  }
-  
-  
-  
-  editarCliente(dto: EditarClienteDTO): Observable<any> {
-    const token = this.authService.getToken();
-    return this.http.put(`${this.apiUrl}`, dto, {
+    return this.http.get<MensajeDTO>(`${this.apiUrl}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
   
+  
+  
+  editarCliente(dto: EditarClienteDTO): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.put<MensajeDTO>(`${this.apiUrl}`, dto, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 
   // Eliminar cliente
-  eliminarCliente(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  eliminarCliente(id: string): Observable<MensajeDTO> {
+    return this.http.delete<MensajeDTO>(`${this.apiUrl}/${id}`);
+  }
+
+  public obtenerCiudades(): Observable<MensajeDTO> {
+    return this.http.get<MensajeDTO>('http://localhost:8080/api/ciudades')
   }
 
 

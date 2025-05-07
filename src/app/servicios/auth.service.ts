@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface LoginResponse { token: string; }
 
@@ -8,6 +9,7 @@ export interface LoginResponse { token: string; }
 export class AuthService {
   private baseUrl = 'http://localhost:8080/api/login';
   private tokenKey = 'auth_token';
+  private loggedIn$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this.tokenKey));
 
   constructor(private http: HttpClient) {}
 
@@ -22,8 +24,17 @@ export class AuthService {
   }
   
 
-  logout() { localStorage.removeItem(this.tokenKey); }
+  logout() { 
+    localStorage.removeItem(this.tokenKey);
+    this.loggedIn$.next(false);
+  }
+
+
   getToken(): string | null { return localStorage.getItem(this.tokenKey); }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.loggedIn$.asObservable();
+  }
 
   getUserIdFromToken(): string | null {
     const token = this.getToken();
@@ -31,6 +42,19 @@ export class AuthService {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.id || payload.userId || payload.sub || null;
+    } catch (e) {
+      console.error('Error al decodificar el token:', e);
+      return null;
+    }
+    
+  }
+
+  getRroleFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.rol;
     } catch (e) {
       console.error('Error al decodificar el token:', e);
       return null;

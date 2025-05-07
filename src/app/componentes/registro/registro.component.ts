@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RegistroClienteComponent } from '../../paginas/registro-cliente/registro-cliente.component';
 import { RegistroEntrenadorComponent } from '../../paginas/registro-entrenador/registro-entrenador.component';
 import { RegistroNutricionistaComponent } from '../../paginas/registro-nutricionista/registro-nutricionista.component';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -13,4 +14,13 @@ import { RegistroNutricionistaComponent } from '../../paginas/registro-nutricion
 })
 export class RegistroComponent {
   selectedTab: string = 'cliente'; // Controla qué pestaña está activa
+  rolActual:string | null;
+
+  constructor(
+    private authService: AuthService
+  ){
+    this.rolActual = this.authService.getRroleFromToken();
+
+  }
+
 }
