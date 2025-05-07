@@ -52,15 +52,26 @@ export class AuthService {
   getRroleFromToken(): string | null {
     const token = this.getToken();
     if (!token) return null;
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.rol;
-    } catch (e) {
-      console.error('Error al decodificar el token:', e);
-      return null;
-    }
-    
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    console.log('Payload del token:', payload); // Verificar el contenido del payload
+    return payload.rol || null;
   }
 
-
+  isAdmin(): boolean {
+    const rol = this.getRroleFromToken();
+    return rol === 'ROLE_ADMIN';
+  }
+  isEntrenador(): boolean {
+    const rol = this.getRroleFromToken();
+    return rol === 'ROLE_ENTRENADOR';
+  }
+  isCliente(): boolean {
+    const rol = this.getRroleFromToken();
+    return rol === 'ROLE_CLIENTE';
+  }
+  isNutricionista(): boolean {
+    const rol = this.getRroleFromToken();
+    return rol === 'ROLE_NUTRICIONISTA';
+  }
 }

@@ -1,31 +1,42 @@
-<div class="container">
-    <ul class="nav nav-tabs mt-3">
-      @switch (rolActual) {
-        @case ("ROLE_CLIENTE") {
-          <li class="nav-item">
-            <a class="nav-link" [class.active]="selectedTab === 'cliente'" (click)="selectedTab = 'cliente'">Cliente</a>
-          </li>
-        }
-        @case ("ROLE_ENTRENADOR") {
-          <li class="nav-item">
-            <a class="nav-link" [class.active]="selectedTab === 'entrenador'" (click)="selectedTab = 'entrenador'">Entrenador</a>
-          </li>
-        }
-        @case ("ROLE_NUTRICIONISTA") {
-          <li class="nav-item">
-            <a class="nav-link" [class.active]="selectedTab === 'nutricionista'" (click)="selectedTab = 'nutricionista'">Nutricionista</a>
-          </li>
-        }
-      }
-      
-      
+<div class="container mt-5">
+  <h5 class="mb-4">
+    <i class="fa-solid fa-user-plus me-2"></i>Crear cuenta
+  </h5>
+
+  <!-- Navegación para seleccionar el rol -->
+  <nav>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a 
+          class="nav-link" 
+          [class.active]="selectedTab === 'cliente'" 
+          (click)="selectedTab = 'cliente'">
+          Cliente
+        </a>
+      </li>
+      <li class="nav-item">
+        <a 
+          class="nav-link" 
+          [class.active]="selectedTab === 'entrenador'" 
+          (click)="selectedTab = 'entrenador'">
+          Entrenador
+        </a>
+      </li>
+      <li class="nav-item">
+        <a 
+          class="nav-link" 
+          [class.active]="selectedTab === 'nutricionista'" 
+          (click)="selectedTab = 'nutricionista'">
+          Nutricionista
+        </a>
+      </li>
     </ul>
-  
-    <!-- Mostrar dinámicamente cada formulario -->
-    <div class="card shadow-lg p-4 mt-3">
-      <app-registro-cliente *ngIf="selectedTab === 'cliente'"></app-registro-cliente>
-      <app-registro-entrenador *ngIf="selectedTab === 'entrenador'"></app-registro-entrenador>
-      <app-registro-nutricionista *ngIf="selectedTab === 'nutricionista'"></app-registro-nutricionista>
-    </div>
+  </nav>
+
+  <!-- Mostrar dinámicamente cada formulario -->
+  <div class="card shadow-lg p-4 mt-3">
+    <app-registro-cliente *ngIf="selectedTab === 'cliente'"></app-registro-cliente>
+    <app-registro-entrenador *ngIf="selectedTab === 'entrenador'"></app-registro-entrenador>
+    <app-registro-nutricionista *ngIf="selectedTab === 'nutricionista'"></app-registro-nutricionista>
   </div>
-  
+</div>

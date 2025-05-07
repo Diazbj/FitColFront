@@ -1,16 +1,19 @@
-export interface ClienteDTO {
+export interface CrearEntrenadorDTO {
 
     usuarioId: string;
   primerNombre: string;
   segundoNombre?: string;
   primerApellido: string;
   segundoApellido?: string;
-  email: string;
+  fechaNacimiento: string;
   sexo: string;
+  email: string;
+  telefonos: string[];
+  codCiudad: string;
   historialMedico?: string;
-  edad: number;
   peso?: number;
   altura?: number;
-  telefonos: string[];
+  password: string;
+
 
 }

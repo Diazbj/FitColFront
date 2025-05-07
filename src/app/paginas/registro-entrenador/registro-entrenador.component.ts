@@ -8,20 +8,19 @@ import { CommonModule } from '@angular/common';
   standalone:true,
   imports: [ReactiveFormsModule, HttpClientModule, CommonModule],
   templateUrl: './registro-entrenador.component.html',
-  styleUrl: './registro-entrenador.component.css'
+  styleUrls: ['./registro-entrenador.component.css']
 })
 export class RegistroEntrenadorComponent implements OnInit {
 
   registroEntrenadorForm!: FormGroup;
-  ciudades: any[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.crearFormulario();
+    // this.crearFormulario(); // Removed to avoid redundancy
   }
 
   ngOnInit(): void {
     this.crearFormulario();
-    this.obtenerCiudades();
   }
 
   private crearFormulario() {
@@ -31,13 +30,12 @@ export class RegistroEntrenadorComponent implements OnInit {
       segundoNombre: ['', [Validators.required, Validators.maxLength(100)]],
       primerApellido: ['', [Validators.required, Validators.maxLength(100)]],
       segundoApellido: ['', [Validators.required, Validators.maxLength(100)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
       password: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
       confirmarPassword: ['', [Validators.required]],
       aniosExp: [null],
-      telefonos: ['', [Validators.required]],
-      codCiudad: ['', [Validators.required]]
-    }, { validators: this.passwordsMatchValidator });
+      telefonos: ['', [Validators.required]]
+    }, { validators: this.validatePasswordsMatch });
   }
 
   public registrar() {
@@ -68,18 +66,8 @@ export class RegistroEntrenadorComponent implements OnInit {
       });
   }
 
-  private passwordsMatchValidator(formGroup: FormGroup) {
+  private validatePasswordsMatch(formGroup: FormGroup) {
     const password = formGroup.get('password')?.value;
     const confirmarPassword = formGroup.get('confirmarPassword')?.value;
-    return password === confirmarPassword ? null : { passwordsMismatch: true };
-  }
-
-  private obtenerCiudades() {
-    this.http.get<any[]>('http://localhost:8080/api/ciudades')
-      .subscribe({
-        next: (data) => this.ciudades = data,
-        error: (error) => console.error("Error al obtener ciudades", error)
-      });
-  }
-
+    return password === confirmarPassword ? null : { passwordsMismatch: true };  }
 }
