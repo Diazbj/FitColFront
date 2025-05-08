@@ -4,7 +4,6 @@ export interface EditarEntrenadorDTO {
   segundoNombre?: string;
   primerApellido: string;
   segundoApellido?: string;
-  historialMedico?: string;
-  peso?: number;
+  aniosExp?: number;
   telefonos: string[];
 }

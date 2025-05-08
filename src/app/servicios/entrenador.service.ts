@@ -37,8 +37,8 @@ export class EntrenadorService {
   }
 
   // Eliminar entrenador
-  eliminarEntrenador(id: string): Observable<MensajeDTO> {
-    return this.http.delete<MensajeDTO>(`${this.apiUrl}/${id}`);
+  eliminarEntrenador(): Observable<MensajeDTO> {
+    return this.http.delete<MensajeDTO>(`${this.apiUrl}`);
   }
 
   // Obtener ciudades

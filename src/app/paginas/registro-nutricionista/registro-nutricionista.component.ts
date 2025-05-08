@@ -36,7 +36,6 @@ export class RegistroNutricionistaComponent implements OnInit {
       confirmarPassword: ['', [Validators.required]],
       aniosExp: [null],
       telefonos: ['', [Validators.required]],
-      codCiudad: ['', [Validators.required]]
     }, { validators: this.passwordsMatchValidator });
   }
 

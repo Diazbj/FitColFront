@@ -6,14 +6,8 @@ export interface CrearEntrenadorDTO {
   primerApellido: string;
   segundoApellido?: string;
   fechaNacimiento: string;
-  sexo: string;
   email: string;
   telefonos: string[];
-  codCiudad: string;
-  historialMedico?: string;
-  peso?: number;
-  altura?: number;
   password: string;
-
-
+  aniosExp?: number;
 }

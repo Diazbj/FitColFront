@@ -1,4 +1,4 @@
-export interface EntrenadorDTO {
+export interface NutricionistaDTO {
 
     usuarioId: string;
   primerNombre: string;

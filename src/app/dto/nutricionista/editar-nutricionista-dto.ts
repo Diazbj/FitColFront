@@ -1,12 +1,9 @@
-export interface EntrenadorDTO {
+export interface EditarNutricionistaDTO {
 
-    usuarioId: string;
   primerNombre: string;
   segundoNombre?: string;
   primerApellido: string;
   segundoApellido?: string;
-  email: string;
-  telefonos: string[];
   aniosExp?: number;
-
+  telefonos: string[];
 }
