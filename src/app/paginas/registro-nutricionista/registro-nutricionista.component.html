@@ -1,36 +1,39 @@
-<div class="container pt-5 pb-5">
-  <h5 class="mb-0">
-    <i class="fa-solid fa-user-plus me-3"></i>Crear cuenta
-  </h5>
-  <hr />
+<div class="container pt-3 pb-4">
+  <!-- Encabezado Principal -->
+  <div class="text-center mb-0">
+    <h2 class="fw-bold">Nutricionista</h2>
+    <p class="text-muted">Por favor, complete la información requerida para registrar un nuevo nutricionista.</p>
+  </div>
 
-  <div class="card-body">
-
-    <form class="row g-3" [formGroup]="registroNutricionistaForm" (ngSubmit)="registrar()" novalidate>
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Cédula:</label>
-        <input class="form-control" type="text" formControlName="usuarioId" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Primer Nombre:</label>
-        <input class="form-control" type="text" formControlName="primerNombre" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Segundo Nombre:</label>
-        <input class="form-control" type="text" formControlName="segundoNombre" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Primer Apellido:</label>
-        <input class="form-control" type="text" formControlName="primerApellido" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Segundo Apellido:</label>
-        <input class="form-control" type="text" formControlName="segundoApellido" />
-      </div>
+  <div class="card shadow">
+    <div class="card-body">
+      <form class="row g-4" [formGroup]="registroNutricionistaForm" (ngSubmit)="registrar()" novalidate>
+        
+        <!-- Información Personal -->
+        <div class="col-12">
+          <h5 class="fw-bold text-primary">Información Personal</h5>
+          <hr />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Cédula:</label>
+          <input class="form-control" type="text" formControlName="usuarioId" placeholder="Ingrese su cédula" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Primer Nombre:</label>
+          <input class="form-control" type="text" formControlName="primerNombre" placeholder="Ingrese su primer nombre" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Segundo Nombre:</label>
+          <input class="form-control" type="text" formControlName="segundoNombre" placeholder="Ingrese su segundo nombre" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Primer Apellido:</label>
+          <input class="form-control" type="text" formControlName="primerApellido" placeholder="Ingrese su primer apellido" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Segundo Apellido:</label>
+          <input class="form-control" type="text" formControlName="segundoApellido" placeholder="Ingrese su segundo apellido" />
+        </div>
 
       <div class="col-12 col-sm-6">
         <label class="form-label">Años de experiencia:</label>
@@ -42,6 +45,14 @@
         <input class="form-control" type="text" formControlName="telefonos" placeholder="Separados por comas" />
       </div>
 
+      <div class="col-12 col-sm-6">
+        <label class="form-label">Ciudad:</label>
+        <select class="form-select" formControlName="codCiudad">
+          <option *ngFor="let ciudad of ciudades" [value]="ciudad.id">
+            {{ ciudad.nombre }}
+          </option>
+        </select>
+      </div>
 
       <div class="col-12 col-sm-6">
         <label class="form-label">Email:</label>
@@ -66,13 +77,13 @@
       </div>
       }
 
-      <div class="col-12 text-center">
-        <button class="btn btn-primary" type="submit" [disabled]="registroNutricionistaForm.invalid">
-          <i class="fa-solid fa-check me-2"></i>Registrar Nutricionista
-        </button>
-      </div>
-    </form>
-
+        <!-- Botón de Envío -->
+        <div class="col-12 text-center">
+          <button class="btn btn-primary btn-lg" type="submit" [disabled]="registroNutricionistaForm.invalid">
+            <i class="fa-solid fa-check me-2"></i>Registrarse
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-
 </div>
