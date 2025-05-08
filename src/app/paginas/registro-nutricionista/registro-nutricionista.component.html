@@ -35,47 +35,48 @@
           <input class="form-control" type="text" formControlName="segundoApellido" placeholder="Ingrese su segundo apellido" />
         </div>
 
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Años de experiencia:</label>
-        <input class="form-control" type="number" formControlName="aniosExp" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Teléfonos:</label>
-        <input class="form-control" type="text" formControlName="telefonos" placeholder="Separados por comas" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Ciudad:</label>
-        <select class="form-select" formControlName="codCiudad">
-          <option *ngFor="let ciudad of ciudades" [value]="ciudad.id">
-            {{ ciudad.nombre }}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Email:</label>
-        <input class="form-control" type="email" formControlName="email" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Contraseña:</label>
-        <input class="form-control" type="password" formControlName="password" />
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <label class="form-label">Repetir Contraseña:</label>
-        <input class="form-control" type="password" formControlName="confirmarPassword" />
-      </div>
-
-      @if (registroNutricionistaForm.hasError('passwordsMismatch')) {
-      <div class="col-12">
-        <div class="alert alert-danger" role="alert">
-          Las contraseñas no coinciden
+        <!-- Contacto -->
+        <div class="col-12">
+          <h5 class="fw-bold text-primary">Contacto</h5>
+          <hr />
         </div>
-      </div>
-      }
+        <div class="col-12 col-md-6">
+          <label class="form-label">Email:</label>
+          <input class="form-control" type="email" formControlName="email" placeholder="Ingrese su correo electrónico" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Teléfonos:</label>
+          <input class="form-control" type="text" formControlName="telefonos" placeholder="Números separados por comas" />
+        </div>
+        
+        <!-- Información Profesional -->
+        <div class="col-12">
+          <h5 class="fw-bold text-primary">Información Profesional</h5>
+          <hr />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Años de Experiencia:</label>
+          <input class="form-control" type="number" formControlName="aniosExp" placeholder="Ingrese sus años de experiencia" />
+        </div>
+    
+        <!-- Seguridad -->
+        <div class="col-12">
+          <h5 class="fw-bold text-primary">Seguridad</h5>
+          <hr />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Contraseña:</label>
+          <input class="form-control" type="password" formControlName="password" placeholder="Ingrese su contraseña" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Repetir Contraseña:</label>
+          <input class="form-control" type="password" formControlName="confirmarPassword" placeholder="Repita su contraseña" />
+        </div>
+        <div class="col-12" *ngIf="registroNutricionistaForm.hasError('passwordsMismatch')">
+          <div class="alert alert-danger" role="alert">
+            Las contraseñas no coinciden
+          </div>
+        </div>
 
         <!-- Botón de Envío -->
         <div class="col-12 text-center">
