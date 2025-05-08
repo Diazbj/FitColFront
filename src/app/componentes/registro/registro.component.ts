@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RegistroClienteComponent } from '../../paginas/registro-cliente/registro-cliente.component';
-import { RegistroEntrenadorComponent } from '../../paginas/registro-entrenador/registro-entrenador.component';
-import { RegistroNutricionistaComponent } from '../../paginas/registro-nutricionista/registro-nutricionista.component';
+import { RegistroClienteComponent } from '../../paginas/registros/registro-cliente/registro-cliente.component';
+import { RegistroEntrenadorComponent } from '../../paginas/registros/registro-entrenador/registro-entrenador.component';
+import { RegistroNutricionistaComponent } from '../../paginas/registros/registro-nutricionista/registro-nutricionista.component';
 import { AuthService } from '../../servicios/auth.service';
 
 @Component({

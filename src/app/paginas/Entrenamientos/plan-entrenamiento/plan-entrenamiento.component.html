@@ -1,0 +1,118 @@
+<div class="container">
+    <h2>Crear Entrenamiento</h2>
+
+    <!-- Formulario para crear/editar planes de entrenamiento -->
+    <form [formGroup]="registroPlanEntrenamientoForm" (ngSubmit)="crearPlanEntrenamiento()">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input
+                type="text"
+                id="nombre"
+                formControlName="nombre"
+                class="form-control"
+            />
+            <div *ngIf="registroPlanEntrenamientoForm.get('nombre')?.invalid && registroPlanEntrenamientoForm.get('nombre')?.touched" class="text-danger">
+                El nombre es requerido y debe tener un máximo de 100 caracteres.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="duracion">Duración (en semanas):</label>
+            <input
+                type="number"
+                id="duracion"
+                formControlName="duracion"
+                class="form-control"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="dificultad">Dificultad:</label>
+            <select
+                id="dificultad"
+                formControlName="dificultad"
+                class="form-control"
+            >
+                <option value="Fácil">Fácil</option>
+                <option value="Intermedio">Intermedio</option>
+                <option value="Difícil">Difícil</option>
+            </select>
+            <div *ngIf="registroPlanEntrenamientoForm.get('dificultad')?.invalid && registroPlanEntrenamientoForm.get('dificultad')?.touched" class="text-danger">
+                La dificultad es requerida.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea
+                id="descripcion"
+                formControlName="descripcion"
+                class="form-control"
+            ></textarea>
+            <div *ngIf="registroPlanEntrenamientoForm.get('descripcion')?.invalid && registroPlanEntrenamientoForm.get('descripcion')?.touched" class="text-danger">
+                La descripción es requerida y debe tener un máximo de 100 caracteres.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="codTipoEntrenamiento">Código Tipo de Entrenamiento:</label>
+            <input
+                type="number"
+                id="codTipoEntrenamiento"
+                formControlName="codTipoEntrenamiento"
+                class="form-control"
+            />
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="registroPlanEntrenamientoForm.invalid">
+            Guardar
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="registroPlanEntrenamientoForm.reset()">
+            Limpiar
+        </button>
+    </form>
+
+    <hr />
+
+    <!-- Tabla para mostrar planes de entrenamiento -->
+    <h3>Lista de Planes de Entrenamiento</h3>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Duración</th>
+                <th>Dificultad</th>
+                <th>Descripción</th>
+                <th>Código Tipo Entrenamiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let plan of planesEntrenamiento">
+                <td>{{ plan.nombre }}</td>
+                <td>{{ plan.duracion }}</td>
+                <td>{{ plan.dificultad }}</td>
+                <td>{{ plan.descripcion }}</td>
+                <td>{{ plan.codTipoEntrenamiento }}</td>
+                <td>
+                    <button
+                        class="btn btn-sm btn-warning"
+                        (click)="editarPlanEntrenamiento(plan.id)"
+                    >
+                        Editar
+                    </button>
+                    <button
+                        class="btn btn-sm btn-danger"
+                        (click)="eliminarPlanEntrenamiento(plan.id)"
+                    >
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="mensaje" class="alert alert-info mt-3">
+        {{ mensaje }}
+    </div>
+</div>

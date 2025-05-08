@@ -8,6 +8,9 @@
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a routerLink="/" class="nav-link px-2 text-secondary">Inicio</a></li>
         <li><a routerLink="/perfil" class="nav-link px-2 text-secondary">Perfil</a></li>
+        <ng-container *ngIf="(isLoggedIn$ | async) === true && rolActual === 'ROLE_ENTRENADOR'">
+          <li><a routerLink="/gestion-plan-entrenamiento" class="nav-link px-2 text-secondary">Gestión de planes</a></li>
+        </ng-container>
       </ul>
 
       <div class="text-end">

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EntrenadorService } from '../../servicios/entrenador.service';
-import { EntrenadorDTO } from '../../dto/entrenador/entrenador-dto';
-import { EditarEntrenadorDTO } from '../../dto/entrenador/editar-entrenador-dto';
+import { EntrenadorService } from '../../../servicios/entrenador.service';
+import { EntrenadorDTO } from '../../../dto/entrenador/entrenador-dto';
+import { EditarEntrenadorDTO } from '../../../dto/entrenador/editar-entrenador-dto';
 import { Router } from '@angular/router';
-import { AuthService } from '../../servicios/auth.service';
+import { AuthService } from '../../../servicios/auth.service';
 
 @Component({
   selector: 'app-perfil-entrenador',

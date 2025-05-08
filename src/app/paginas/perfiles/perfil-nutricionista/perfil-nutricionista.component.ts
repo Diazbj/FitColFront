@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { EditarNutricionistaDTO } from '../../dto/nutricionista/editar-nutricionista-dto';
-import { NutricionistaDTO } from '../../dto/nutricionista/nutricionista-dto';
-import { NutricionistaService } from '../../servicios/nutricionista.service';
-import { AuthService } from '../../servicios/auth.service';
+import { EditarNutricionistaDTO } from '../../../dto/nutricionista/editar-nutricionista-dto';
+import { NutricionistaDTO } from '../../../dto/nutricionista/nutricionista-dto';
+import { NutricionistaService } from '../../../servicios/nutricionista.service';
+import { AuthService } from '../../../servicios/auth.service';
 
 @Component({
   selector: 'app-perfil-nutricionista',

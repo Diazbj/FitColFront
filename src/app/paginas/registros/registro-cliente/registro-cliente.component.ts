@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ClienteService } from '../../servicios/cliente.service';
-import { CrearClienteDTO } from '../../dto/cliente/crear-cliente-dto';
+import { ClienteService } from '../../../servicios/cliente.service';
+import { CrearClienteDTO } from '../../../dto/cliente/crear-cliente-dto';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../servicios/auth.service';
-import { ClienteDTO } from '../../dto/cliente/cliente-dto';
+import { AuthService } from '../../../servicios/auth.service';
+import { ClienteDTO } from '../../../dto/cliente/cliente-dto';
 
 @Component({
   selector: 'app-registro-cliente',

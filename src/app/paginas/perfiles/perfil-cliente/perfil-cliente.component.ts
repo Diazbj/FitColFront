@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../servicios/auth.service';
-import { ClienteService } from '../../servicios/cliente.service';
-import { ClienteDTO } from '../../dto/cliente/cliente-dto';
+import { AuthService } from '../../../servicios/auth.service';
+import { ClienteService } from '../../../servicios/cliente.service';
+import { ClienteDTO } from '../../../dto/cliente/cliente-dto';
 import { CommonModule } from '@angular/common';
-import { EditarClienteDTO } from '../../dto/cliente/editar-cliente-dto';
+import { EditarClienteDTO } from '../../../dto/cliente/editar-cliente-dto';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({

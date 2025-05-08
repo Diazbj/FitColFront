@@ -14,11 +14,14 @@ import { Observable } from 'rxjs';
 export class HeaderComponent {
   title = 'FitCol'; // ← Título personalizado para tu app
   isLoggedIn$!: Observable<boolean>;
+  rolActual: string | null = null;
 
   constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.isLoggedIn$ = this.auth.isLoggedIn(); // Reactivo al cambio de estado
+    this.rolActual = this.auth.getRroleFromToken();
+    console.log('Rol detectado:', this.rolActual);
   }
 
   logout() {

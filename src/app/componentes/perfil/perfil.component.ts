@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PerfilClienteComponent } from '../../paginas/perfil-cliente/perfil-cliente.component';
-import { PerfilEntrenadorComponent } from '../../paginas/perfil-entrenador/perfil-entrenador.component';
-import { PerfilNutricionistaComponent } from '../../paginas/perfil-nutricionista/perfil-nutricionista.component';
+import { PerfilClienteComponent } from '../../paginas/perfiles/perfil-cliente/perfil-cliente.component';
+import { PerfilEntrenadorComponent } from '../../paginas/perfiles/perfil-entrenador/perfil-entrenador.component';
+import { PerfilNutricionistaComponent } from '../../paginas/perfiles/perfil-nutricionista/perfil-nutricionista.component';
 import { AuthService } from '../../servicios/auth.service';
 
 @Component({
