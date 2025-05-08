@@ -40,8 +40,11 @@ export class ClienteService {
   }
 
   // Eliminar cliente
-  eliminarCliente(id: string): Observable<MensajeDTO> {
-    return this.http.delete<MensajeDTO>(`${this.apiUrl}/${id}`);
+  eliminarCliente(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.delete<MensajeDTO>(`${this.apiUrl}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
 
   public obtenerCiudades(): Observable<MensajeDTO> {

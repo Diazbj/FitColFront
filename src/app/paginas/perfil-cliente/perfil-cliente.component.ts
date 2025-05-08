@@ -5,6 +5,7 @@ import { ClienteDTO } from '../../dto/cliente/cliente-dto';
 import { CommonModule } from '@angular/common';
 import { EditarClienteDTO } from '../../dto/cliente/editar-cliente-dto';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-perfil-cliente',
   standalone: true,
@@ -17,7 +18,7 @@ export class PerfilClienteComponent implements OnInit {
   editando: boolean = false;
   usuarioEditado: EditarClienteDTO = {} as EditarClienteDTO;
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(private router: Router, private authService: AuthService,private clienteService: ClienteService) {}
 
   telefonosString: string = '';
 
@@ -58,6 +59,22 @@ ngOnInit() {
       },
       error: (err) => console.error("Error al actualizar:", err)
     });
+  }
+
+  eliminarCliente() {
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');
+    if (confirmacion) {
+      this.clienteService.eliminarCliente().subscribe({
+        next: () => {
+          console.log("Cliente eliminado");
+          alert("Cliente eliminado con éxito");
+          this.authService.logout(); // Cierra sesión del usuario después de eliminar la cuenta
+          this.router.navigate(['/ruta-a-redirigir']);
+          // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito
+        },
+        error: (err) => console.error("Error al eliminar cliente:", err)
+      });
+    }
   }
   
 

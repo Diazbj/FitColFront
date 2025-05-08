@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { EntrenadorService } from '../../servicios/entrenador.service';
 import { EntrenadorDTO } from '../../dto/entrenador/entrenador-dto';
 import { EditarEntrenadorDTO } from '../../dto/entrenador/editar-entrenador-dto';
+import { Router } from '@angular/router';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-perfil-entrenador',
@@ -17,7 +19,7 @@ export class PerfilEntrenadorComponent implements OnInit {
   editando: boolean = false;
   usuarioEditado: EditarEntrenadorDTO = {} as EditarEntrenadorDTO;
 
-  constructor(private entrenadorService: EntrenadorService) {}
+  constructor(private router: Router, private authService: AuthService,private entrenadorService: EntrenadorService) {}
 
   telefonosString: string = '';
 
@@ -48,12 +50,13 @@ export class PerfilEntrenadorComponent implements OnInit {
   actualizarEntrenador() {
     const dto: EditarEntrenadorDTO = {
       ...this.usuarioEditado,
-      telefonos: this.usuarioEditado.telefonos
+      telefonos: this.telefonosString.split(',').map(t => t.trim()).filter(t => t !== '') // Convierte string a array
     };
 
     this.entrenadorService.editarEntrenador(dto).subscribe({
       next: () => {
         this.usuario = { ...this.usuario, ...dto };
+        console.log('Entrenador actualizado:', this.usuario);
         this.editando = false;
       },
       error: (err) => {
@@ -63,25 +66,30 @@ export class PerfilEntrenadorComponent implements OnInit {
   }
 
   eliminarEntrenador() {
-    this.entrenadorService.eliminarEntrenador().subscribe({
-      next: () => {
-        console.log('Entrenador eliminado con éxito');
-        // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito
-      },
-      error: (err) => {
-        console.error('Error al eliminar el entrenador:', err);
-      }
-    });
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');
+    if (confirmacion) {
+      this.entrenadorService.eliminarEntrenador().subscribe({
+        next: () => {
+          console.log('Entrenador eliminado con éxito.');
+          alert
+          // Aquí puedes redirigir al usuario o realizar otra acción
+          this.authService.logout();
+          this.router.navigate(['/ruta-a-redirigir']);
+        },
+        error: (err) => {
+          console.error('Error al eliminar entrenador:', err);
+        }
+      });
+    }
   }
-
   private mapEntrenadorToEditarDTO(entrenador: EntrenadorDTO): EditarEntrenadorDTO {
     return {
       primerNombre: entrenador.primerNombre,
       segundoNombre: entrenador.segundoNombre,
       primerApellido: entrenador.primerApellido,
       segundoApellido: entrenador.segundoApellido,
+      aniosExp: entrenador.aniosExp,
       telefonos: entrenador.telefonos ?? [],
-      aniosExp: entrenador.aniosExp
     };
   }
 

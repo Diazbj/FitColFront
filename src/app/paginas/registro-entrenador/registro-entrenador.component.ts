@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro-entrenador',
@@ -14,7 +15,11 @@ export class RegistroEntrenadorComponent implements OnInit {
 
   registroEntrenadorForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router) {
     this.crearFormulario();
     // this.crearFormulario(); // Removed to avoid redundancy
   }
@@ -57,8 +62,9 @@ export class RegistroEntrenadorComponent implements OnInit {
     this.http.post('http://localhost:8080/api/entrenadores', payload)
       .subscribe({
         next: (respuesta) => {
-          console.log("Entrenador registrado", respuesta);
-          this.registroEntrenadorForm.reset();
+          alert("Registro exitoso. Ahora puedes iniciar sesión."); // ✅ Alerta
+        this.registroEntrenadorForm.reset();
+        this.router.navigate(['/login']); // ✅ Redirección al login
         },
         error: (error) => {
           console.error("Error al registrar entrenador", error);

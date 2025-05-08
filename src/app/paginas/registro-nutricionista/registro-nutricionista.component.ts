@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro-nutricionista',
@@ -14,7 +15,12 @@ export class RegistroNutricionistaComponent implements OnInit {
 
   registroNutricionistaForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private fb: FormBuilder, 
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.crearFormulario();
   }
 
@@ -55,8 +61,9 @@ export class RegistroNutricionistaComponent implements OnInit {
     this.http.post('http://localhost:8080/api/nutricionistas', payload)
       .subscribe({
         next: (respuesta) => {
-          console.log("Nutricionista registrado", respuesta);
-          this.registroNutricionistaForm.reset();
+          alert("Registro exitoso. Ahora puedes iniciar sesión."); // ✅ Alerta
+        this.registroNutricionistaForm.reset();
+        this.router.navigate(['/login']); // ✅ Redirección al login
         },
         error: (error) => {
           console.error("Error al registrar nutricionista", error);

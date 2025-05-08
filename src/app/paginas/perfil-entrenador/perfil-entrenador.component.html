@@ -34,6 +34,19 @@
               </div>
             </div>
           </div>
+
+          <!-- aniosExp -->
+            <div class="col-md-6">
+                <div class="d-flex">
+                    <i class="fa-solid fa-calendar fa-fw me-2 text-secondary"></i>
+                    <div class="w-100">
+                        <small class="text-muted">Años de experiencia</small>
+                        <div *ngIf="!editando">{{ usuario.aniosExp}}</div>
+                        <input *ngIf="editando" [(ngModel)]="usuarioEditado.aniosExp" class="form-control" placeholder="aniosExp" />
+                    </div>
+                </div>
+            </div>
+
   
           <!-- Email -->
           <div class="col-md-6">
@@ -60,15 +73,21 @@
               </div>
             </div>
           </div>
-
   
           <!-- Botones -->
-          <div class="col-12 mt-4">
-            <button *ngIf="!editando" class="btn btn-primary" (click)="activarEdicion()">Editar</button>
-            <div *ngIf="editando">
-              <button class="btn btn-success me-2" (click)="actualizarEntrenador()">Guardar</button>
-              <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          <div class="col-12 mt-4 d-flex justify-content-between">
+            <div>
+                <button *ngIf="!editando" class="btn btn-primary" (click)="activarEdicion()">Editar</button>
+                <div *ngIf="editando">
+                    <button class="btn btn-success me-2" (click)="actualizarEntrenador()">Guardar</button>
+                    <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+                </div>
             </div>
+            <div>
+                <button *ngIf="!editando" class="btn btn-danger" (click)="eliminarEntrenador()">Eliminar Cuenta</button>
+            </div>
+
+
           </div>
         </div>
       </div>

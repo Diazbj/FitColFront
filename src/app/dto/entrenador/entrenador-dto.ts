@@ -5,8 +5,9 @@ export interface EntrenadorDTO {
   segundoNombre?: string;
   primerApellido: string;
   segundoApellido?: string;
+  aniosExp?: number;
   email: string;
   telefonos: string[];
-  aniosExp?: number;
+
 
 }

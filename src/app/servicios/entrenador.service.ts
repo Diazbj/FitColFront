@@ -38,7 +38,10 @@ export class EntrenadorService {
 
   // Eliminar entrenador
   eliminarEntrenador(): Observable<MensajeDTO> {
-    return this.http.delete<MensajeDTO>(`${this.apiUrl}`);
+    const token = this.authService.getToken();
+    return this.http.delete<MensajeDTO>(this.apiUrl, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
 
   // Obtener ciudades

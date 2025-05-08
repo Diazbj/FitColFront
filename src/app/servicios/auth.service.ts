@@ -19,6 +19,7 @@ export class AuthService {
         tap(res => {
           console.log('Token recibido:', res.token); // Verificar si el token llega
           localStorage.setItem(this.tokenKey, res.token);
+          this.loggedIn$.next(true); // ✅ Notificar que el usuario está logueado
         })
       );
   }

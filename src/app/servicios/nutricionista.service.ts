@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { MensajeDTO } from '../dto/mensaje-dto';
 import { CrearNutricionistaDTO } from '../dto/nutricionista/crear-nutricionista-dto';
+import { EditarNutricionistaDTO } from '../dto/nutricionista/editar-nutricionista-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,16 +30,18 @@ export class NutricionistaService {
   }
 
   // Editar nutricionista
-  editarNutricionista(dto: CrearNutricionistaDTO): Observable<MensajeDTO> {
+  editarNutricionista(dto: EditarNutricionistaDTO): Observable<MensajeDTO> {
     const token = this.authService.getToken();
     return this.http.put<MensajeDTO>(`${this.apiUrl}`, dto, {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
-  // Eliminar nutricionista
   eliminarNutricionista(): Observable<MensajeDTO> {
-    return this.http.delete<MensajeDTO>(`${this.apiUrl}`);
+    const token = this.authService.getToken();
+    return this.http.delete<MensajeDTO>(this.apiUrl, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
-  
+
 
 }
