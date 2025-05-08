@@ -53,4 +53,14 @@ export class PlanEntrenamientoService {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
+
+  // Obtener tipos de entrenamiento
+  obtenerTiposEntrenamiento(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>('http://localhost:8080/api/tipo-entrenamiento', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+  }
+
 }

@@ -15,6 +15,7 @@ export class PlanEntrenamientoComponent implements OnInit {
   registroPlanEntrenamientoForm!: FormGroup;
   planesEntrenamiento: any[] = [];
   mensaje: string = '';
+  tipoEntrenamiento: any[] = [];
 
 
   constructor(
@@ -25,6 +26,7 @@ export class PlanEntrenamientoComponent implements OnInit {
   ngOnInit() {
     this.crearFormulario();
     this.obtenerPlanesEntrenamiento();
+    this.obtenerTiposEntrenamiento();
   }
 
   private crearFormulario() {
@@ -33,13 +35,26 @@ export class PlanEntrenamientoComponent implements OnInit {
       duracion: [null],
       dificultad: ['', [Validators.required, Validators.maxLength(100)]],
       descripcion: ['', [Validators.required, Validators.maxLength(100)]],
-      codTipoEntrenamiento: [null]
+      codTipoEntrenamiento: [null, Validators.required]
+    });
+
+    // Ensure codTipoEntrenamiento is properly initialized
+    this.registroPlanEntrenamientoForm.get('codTipoEntrenamiento')?.valueChanges.subscribe(value => {
+      console.log('codTipoEntrenamiento changed:', value);
     });
   }
 
   crearPlanEntrenamiento() {
     if (this.registroPlanEntrenamientoForm.valid) {
       const plan = this.registroPlanEntrenamientoForm.value;
+    
+      // Ensure codTipoEntrenamiento is not undefined
+      if (!plan.codTipoEntrenamiento) {
+        console.error('Error: codTipoEntrenamiento is undefined or null.');
+        return;
+      }
+    
+      console.log('Tipo de entrenamiento enviado:', typeof plan.codTipoEntrenamiento, plan.codTipoEntrenamiento);
       this.planEntrenamientoService.crearPlanEntrenamiento(plan).subscribe({
         next: (response: MensajeDTO) => {
           this.mensaje = response.mensaje;
@@ -89,5 +104,13 @@ export class PlanEntrenamientoComponent implements OnInit {
         }
       });
     }
+  }
+
+  obtenerTiposEntrenamiento() {
+    this.planEntrenamientoService.obtenerTiposEntrenamiento().subscribe({
+      next: (data) => {this.tipoEntrenamiento = data.mensaje,console.log('Tipos de entrenamiento recibidos:', data.mensaje)},
+      error: (error) => console.error('Error al obtener los tipos de entrenamiento', error)
+    });
+    
   }
 }
