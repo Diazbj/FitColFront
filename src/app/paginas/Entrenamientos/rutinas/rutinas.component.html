@@ -1,1 +1,50 @@
-<p>rutinas works!</p>
+<div class="container">
+    <h2>Crear Nueva Rutina</h2>
+
+    <form (ngSubmit)="crearRutina()">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" [(ngModel)]="nuevaRutina.nombre" name="nombre" class="form-control"
+                required />
+        </div>
+
+        <div class="form-group">
+            <label for="plan">Plan de Entrenamiento:</label>
+            <select id="plan" [(ngModel)]="nuevaRutina.codPlanEntrenamiento" name="codPlanEntrenamiento"
+                class="form-control" required>
+                <option [ngValue]="null" disabled selected>Seleccione un plan</option>
+                <option *ngFor="let plan of planes" [ngValue]="plan.codPlanEntrenamiento">
+                    {{ plan.nombre }}
+                </option>
+            </select>
+        </div>
+
+        <h3>Ejercicios</h3>
+        <div class="form-group" *ngFor="let ej of nuevaRutina.ejercicios; let i = index">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="codEjercicio{{ i }}">Código Ejercicio:</label>
+                    <input type="number" id="codEjercicio{{ i }}" [(ngModel)]="ej.codEjercicio"
+                        name="codEjercicio{{ i }}" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label for="reps{{ i }}">Reps:</label>
+                    <input type="number" id="reps{{ i }}" [(ngModel)]="ej.repeticiones" name="reps{{ i }}"
+                        class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label for="series{{ i }}">Series:</label>
+                    <input type="number" id="series{{ i }}" [(ngModel)]="ej.series" name="series{{ i }}"
+                        class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+            <button type="button" class="btn btn-secondary" (click)="agregarEjercicio()">
+                Agregar Ejercicio
+            </button>
+            <button type="submit" class="btn btn-primary">Crear Rutina</button>
+        </div>
+    </form>
+</div>

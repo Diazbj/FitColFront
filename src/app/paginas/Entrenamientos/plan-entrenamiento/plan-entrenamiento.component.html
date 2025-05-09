@@ -2,7 +2,7 @@
     <h2>Crear Entrenamiento</h2>
 
     <!-- Formulario para crear/editar planes de entrenamiento -->
-    <form [formGroup]="registroPlanEntrenamientoForm" (ngSubmit)="crearPlanEntrenamiento()">
+    <form [formGroup]="registroPlanEntrenamientoForm" (ngSubmit)="submitFormulario()">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" formControlName="nombre" class="form-control" />
@@ -53,12 +53,17 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="registroPlanEntrenamientoForm.invalid">
-            Guardar
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="registroPlanEntrenamientoForm.reset()">
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary" [disabled]="registroPlanEntrenamientoForm.invalid">
+            {{ idEditando !== null ? 'Actualizar' : 'Guardar' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="registroPlanEntrenamientoForm.reset()">
             Limpiar
-        </button>
+            </button>
+            <button type="button" class="btn btn-warning" *ngIf="idEditando !== null" (click)="cancelarEdicion()">
+            Cancelar edición
+            </button>
+        </div>
     </form>
 
     <hr />
@@ -69,25 +74,23 @@
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Duración</th>
+                <th>Semanas</th>
                 <th>Dificultad</th>
                 <th>Descripción</th>
-                <th>Código Tipo Entrenamiento</th>
+                <th>Tipo Entrenamiento</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let plan of planesEntrenamiento">
+            <tr *ngFor="let plan of planesEntrenamiento" (click)="cargarFormulario(plan)">
                 <td>{{ plan.nombre }}</td>
                 <td>{{ plan.duracion }}</td>
                 <td>{{ plan.dificultad }}</td>
                 <td>{{ plan.descripcion }}</td>
-                <td>{{ plan.codTipoEntrenamiento }}</td>
+                <td>{{ plan.tipoEntrenamientoNombre || 'Desconocido' }}</td>
                 <td>
-                    <button class="btn btn-sm btn-warning" (click)="editarPlanEntrenamiento(plan.id)">
-                        Editar
-                    </button>
-                    <button class="btn btn-sm btn-danger" (click)="eliminarPlanEntrenamiento(plan.id)">
+                    <button class="btn btn-sm btn-danger"
+                        (click)="eliminarPlanEntrenamiento(plan.codPlanEntrenamiento); $event.stopPropagation()">
                         Eliminar
                     </button>
                 </td>

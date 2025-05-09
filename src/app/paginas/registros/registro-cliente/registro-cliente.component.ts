@@ -37,8 +37,9 @@ export class RegistroClienteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.crearFormulario();
     this.obtenerCiudades();
+    this.crearFormulario();
+   
     if (this.esPerfil) {
       this.clienteService.obtenerCliente().subscribe({
         next: (res) => {

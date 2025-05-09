@@ -5,5 +5,5 @@ export interface planEntrenamientoDTO {
   dificultad: string;
   descripcion: string;
   entrenadorId: number;
-  tipoEntrenamientoId: number;
+  codTipoEntrenamiento: number;
 }

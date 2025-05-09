@@ -16,12 +16,14 @@ export class PlanEntrenamientoComponent implements OnInit {
   planesEntrenamiento: any[] = [];
   mensaje: string = '';
   tipoEntrenamiento: any[] = [];
-
+  idEditando: number | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private planEntrenamientoService: PlanEntrenamientoService
-  ) {}
+  ) {
+    this.crearFormulario();
+  }
 
   ngOnInit() {
     this.crearFormulario();
@@ -32,33 +34,29 @@ export class PlanEntrenamientoComponent implements OnInit {
   private crearFormulario() {
     this.registroPlanEntrenamientoForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.maxLength(100)]],
-      duracion: [null],
+      duracion: [null, [Validators.required, Validators.min(1)]],
       dificultad: ['', [Validators.required, Validators.maxLength(100)]],
-      descripcion: ['', [Validators.required, Validators.maxLength(100)]],
+      descripcion: ['', [Validators.required, Validators.maxLength(255)]],
       codTipoEntrenamiento: [null, Validators.required]
     });
-
-    // Ensure codTipoEntrenamiento is properly initialized
-    this.registroPlanEntrenamientoForm.get('codTipoEntrenamiento')?.valueChanges.subscribe(value => {
-      console.log('codTipoEntrenamiento changed:', value);
-    });
   }
+
+
+  // Removed duplicate submitFormulario function
 
   crearPlanEntrenamiento() {
     if (this.registroPlanEntrenamientoForm.valid) {
       const plan = this.registroPlanEntrenamientoForm.value;
-    
-      // Ensure codTipoEntrenamiento is not undefined
+
       if (!plan.codTipoEntrenamiento) {
         console.error('Error: codTipoEntrenamiento is undefined or null.');
         return;
       }
-    
-      console.log('Tipo de entrenamiento enviado:', typeof plan.codTipoEntrenamiento, plan.codTipoEntrenamiento);
+
       this.planEntrenamientoService.crearPlanEntrenamiento(plan).subscribe({
         next: (response: MensajeDTO) => {
           this.mensaje = response.mensaje;
-          this.obtenerPlanesEntrenamiento(); // Actualizar la lista
+          this.obtenerPlanesEntrenamiento();
           this.registroPlanEntrenamientoForm.reset();
         },
         error: (err) => {
@@ -79,16 +77,27 @@ export class PlanEntrenamientoComponent implements OnInit {
     });
   }
 
-  eliminarPlanEntrenamiento(id: number) {
-    this.planEntrenamientoService.eliminarPlanEntrenamiento(id).subscribe({
-      next: (response: MensajeDTO) => {
-        this.mensaje = response.mensaje;
-        this.obtenerPlanesEntrenamiento(); // Actualizar la lista
-      },
-      error: (err) => {
-        console.error('Error al eliminar el plan:', err);
-      }
-    });
+  
+
+  cargarFormulario(plan: any) {
+  this.idEditando = plan.codPlanEntrenamiento; // ✅ aquí asignas el ID correcto del plan
+  this.registroPlanEntrenamientoForm.patchValue({
+    nombre: plan.nombre,
+    duracion: plan.duracion,
+    dificultad: plan.dificultad,
+    descripcion: plan.descripcion,
+    codTipoEntrenamiento: plan.tipoEntrenamientoId // ✅ asegúrate de usar el ID del tipo
+  });
+  console.log('Plan seleccionado para editar:', plan);
+  console.log('ID asignado para editar:', this.idEditando);
+}
+
+  submitFormulario() {
+    if (this.idEditando !== null) {
+      this.editarPlanEntrenamiento(this.idEditando);
+    } else {
+      this.crearPlanEntrenamiento();
+    }
   }
 
   editarPlanEntrenamiento(id: number) {
@@ -97,7 +106,9 @@ export class PlanEntrenamientoComponent implements OnInit {
       this.planEntrenamientoService.editarPlanEntrenamiento(id, plan).subscribe({
         next: (response: MensajeDTO) => {
           this.mensaje = response.mensaje;
-          this.obtenerPlanesEntrenamiento(); // Actualizar la lista
+          this.obtenerPlanesEntrenamiento();
+          this.registroPlanEntrenamientoForm.reset();
+          this.idEditando = null;
         },
         error: (err) => {
           console.error('Error al editar el plan:', err);
@@ -108,9 +119,37 @@ export class PlanEntrenamientoComponent implements OnInit {
 
   obtenerTiposEntrenamiento() {
     this.planEntrenamientoService.obtenerTiposEntrenamiento().subscribe({
-      next: (data) => {this.tipoEntrenamiento = data.mensaje,console.log('Tipos de entrenamiento recibidos:', data.mensaje)},
+      next: (data) => {
+        this.tipoEntrenamiento = data.mensaje;
+      },
       error: (error) => console.error('Error al obtener los tipos de entrenamiento', error)
     });
-    
+  }
+
+  getTipoEntrenamientoNombre(codTipoEntrenamiento: number): string {
+    const tipo = this.tipoEntrenamiento.find(t => t.id == codTipoEntrenamiento);
+    return tipo ? tipo.nombre : 'Desconocido';
+  }
+
+  cancelarEdicion() {
+    this.registroPlanEntrenamientoForm.reset();
+    this.idEditando = null;
+  }
+
+  eliminarPlanEntrenamiento(id: number | null) {
+    console.log('ID recibido para eliminar:', id);
+    if (id === null || id === undefined) {
+      console.error('Error: ID is null or undefined.');
+      return;
+    }
+    this.planEntrenamientoService.eliminarPlanEntrenamiento(id).subscribe({
+      next: (response: MensajeDTO) => {
+        this.mensaje = response.mensaje;
+        this.obtenerPlanesEntrenamiento();
+      },
+      error: (err) => {
+        console.error('Error al eliminar el plan:', err);
+      }
+    });
   }
 }
