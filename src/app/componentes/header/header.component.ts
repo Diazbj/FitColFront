@@ -20,8 +20,10 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.isLoggedIn$ = this.auth.isLoggedIn(); // Reactivo al cambio de estado
-    this.rolActual = this.auth.getRroleFromToken();
-    console.log('Rol detectado:', this.rolActual);
+    this.auth.rol$.subscribe(rol => {
+      this.rolActual = rol; // Actualiza el rol actual
+      console.log('Rol detectado:', this.rolActual); // Imprime el rol en la consola
+    });
   }
 
   logout() {

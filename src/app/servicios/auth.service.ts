@@ -10,6 +10,8 @@ export class AuthService {
   private baseUrl = 'http://localhost:8080/api/login';
   private tokenKey = 'auth_token';
   private loggedIn$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this.tokenKey));
+  private rolSubject = new BehaviorSubject<string | null>(this.getRroleFromToken());
+  rol$ = this.rolSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -20,6 +22,7 @@ export class AuthService {
           console.log('Token recibido:', res.token); // Verificar si el token llega
           localStorage.setItem(this.tokenKey, res.token);
           this.loggedIn$.next(true); // ✅ Notificar que el usuario está logueado
+          this.rolSubject.next(this.getRroleFromToken()); // Emitir el rol del usuario
         })
       );
   }
@@ -28,6 +31,7 @@ export class AuthService {
   logout() { 
     localStorage.removeItem(this.tokenKey);
     this.loggedIn$.next(false);
+    this.rolSubject.next(null);
   }
 
 
