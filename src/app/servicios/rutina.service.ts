@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 export class RutinaService {
     private apiUrl = 'http://localhost:8080/api/rutinas'; // Replace with your backend URL
 
-    constructor(private http: HttpClient,private authService: AuthService) {}
+    constructor(private http: HttpClient, private authService: AuthService) { }
 
     crearRutina(dto: any): Observable<MensajeDTO> {
         const token = this.authService.getToken(); // Assuming you store the token in local storage
@@ -35,8 +35,8 @@ export class RutinaService {
     }
 
     listarRutinas(): Observable<MensajeDTO> {
-        const token = this.authService.getToken(); // Assuming you store the token in local storage
-        return this.http.get<MensajeDTO>(this.apiUrl, {
+        const token = this.authService.getToken();
+        return this.http.get<MensajeDTO>(`${this.apiUrl}/entrenador`, {
             headers: { Authorization: `Bearer ${token}` }
         });
     }
@@ -50,7 +50,7 @@ export class RutinaService {
 
     asignarRutinaAPlan(dto: any): Observable<MensajeDTO> {
         const token = this.authService.getToken(); // Assuming you store the token in local storage
-        return this.http.post<MensajeDTO>(`${this.apiUrl}/asignar`, dto, {
+        return this.http.post<MensajeDTO>(`${this.apiUrl}/asignarPlan`, dto, {
             headers: { Authorization: `Bearer ${token}` }
         });
     }

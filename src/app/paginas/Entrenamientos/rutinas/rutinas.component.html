@@ -1,50 +1,84 @@
-<div class="container">
-    <h2>Crear Nueva Rutina</h2>
+<!-- Formulario de rutina -->
+<div class="container mt-4">
+  <form (ngSubmit)="crearRutina()" class="card p-3 shadow-sm">
+    <h5 class="card-title mb-3">Crear Nueva Rutina</h5>
 
-    <form (ngSubmit)="crearRutina()">
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" [(ngModel)]="nuevaRutina.nombre" name="nombre" class="form-control"
-                required />
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Nombre de Rutina</label>
+      <input type="text" [(ngModel)]="nuevaRutina.nombre" name="nombre" class="form-control" required />
+    </div>
 
-        <div class="form-group">
-            <label for="plan">Plan de Entrenamiento:</label>
-            <select id="plan" [(ngModel)]="nuevaRutina.codPlanEntrenamiento" name="codPlanEntrenamiento"
-                class="form-control" required>
-                <option [ngValue]="null" disabled selected>Seleccione un plan</option>
-                <option *ngFor="let plan of planes" [ngValue]="plan.codPlanEntrenamiento">
-                    {{ plan.nombre }}
-                </option>
-            </select>
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Plan de Entrenamiento</label>
+      <select [(ngModel)]="nuevaRutina.codPlanEntrenamiento" name="plan" class="form-select" required>
+        <option *ngFor="let plan of planes" [value]="plan.codPlanEntrenamiento">{{ plan.nombre }}</option>
+      </select>
+    </div>
 
-        <h3>Ejercicios</h3>
-        <div class="form-group" *ngFor="let ej of nuevaRutina.ejercicios; let i = index">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="codEjercicio{{ i }}">Código Ejercicio:</label>
-                    <input type="number" id="codEjercicio{{ i }}" [(ngModel)]="ej.codEjercicio"
-                        name="codEjercicio{{ i }}" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label for="reps{{ i }}">Reps:</label>
-                    <input type="number" id="reps{{ i }}" [(ngModel)]="ej.repeticiones" name="reps{{ i }}"
-                        class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label for="series{{ i }}">Series:</label>
-                    <input type="number" id="series{{ i }}" [(ngModel)]="ej.series" name="series{{ i }}"
-                        class="form-control" />
-                </div>
-            </div>
-        </div>
+    <button type="submit" class="btn btn-primary w-100">Crear Rutina</button>
+  </form>
+</div>
 
-        <div class="d-flex justify-content-between mt-3">
-            <button type="button" class="btn btn-secondary" (click)="agregarEjercicio()">
-                Agregar Ejercicio
-            </button>
-            <button type="submit" class="btn btn-primary">Crear Rutina</button>
-        </div>
-    </form>
+<!-- Selector de rutina por plan -->
+<div class="container mt-5">
+  <div class="row g-3 align-items-end">
+    <div class="col-md-6">
+      <label class="form-label">Plan:</label>
+      <select [(ngModel)]="planSeleccionado" (change)="filtrarRutinasPorPlan()" class="form-select">
+        <option *ngFor="let plan of planes" [value]="plan.codPlanEntrenamiento">{{ plan.nombre }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Rutina:</label>
+      <select [(ngModel)]="rutinaSeleccionada" (change)="mostrarEjercicios()" class="form-select">
+        <option *ngFor="let rutina of rutinasFiltradas" [ngValue]="rutina">{{ rutina.nombre }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Formulario para agregar ejercicios a la rutina seleccionada -->
+<div *ngIf="rutinaSeleccionada" class="container mt-5">
+  <form (ngSubmit)="agregarEjercicioARutinaSeleccionada()" class="card p-3 shadow-sm">
+    <h5 class="card-title mb-3">Agregar Ejercicio</h5>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <input [(ngModel)]="nuevoEjercicio.codEjercicio" name="nuevoCodEjercicio" class="form-control" placeholder="Código" required />
+      </div>
+      <div class="col-md-4">
+        <input [(ngModel)]="nuevoEjercicio.repeticiones" name="nuevoReps" class="form-control" placeholder="Reps" required />
+      </div>
+      <div class="col-md-4">
+        <input [(ngModel)]="nuevoEjercicio.series" name="nuevoSeries" class="form-control" placeholder="Series" required />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3 w-100">Agregar Ejercicio</button>
+  </form>
+
+  <!-- Tabla de ejercicios -->
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Código</th>
+          <th>Reps</th>
+          <th>Series</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ej of rutinaSeleccionada.ejercicios">
+          <td>{{ ej.codEjercicio }}</td>
+          <td>{{ ej.repeticiones }}</td>
+          <td>{{ ej.series }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="eliminarEjercicio(ej)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
