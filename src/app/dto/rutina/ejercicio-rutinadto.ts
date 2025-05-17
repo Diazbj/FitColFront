@@ -1,6 +1,6 @@
 export interface ejercicioRutinaDTO {
 
-    codEjercicio: number;
-  repeticiones: number;
-  series: number;
+  numeroRepeticiones: number;
+  numeroSeries: number;
+  codEjercicio: number; 
 }

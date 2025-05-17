@@ -41,17 +41,29 @@
 <!-- Formulario para agregar ejercicios a la rutina seleccionada -->
 <div *ngIf="rutinaSeleccionada" class="container mt-5">
   <form (ngSubmit)="agregarEjercicioARutinaSeleccionada()" class="card p-3 shadow-sm">
-    <h5 class="card-title mb-3">Agregar Ejercicio</h5>
+    <h5 class="card-title mb-3</form>">Agregar Ejercicio</h5>
 
     <div class="row g-3">
       <div class="col-md-4">
-        <input [(ngModel)]="nuevoEjercicio.codEjercicio" name="nuevoCodEjercicio" class="form-control" placeholder="Código" required />
+        <label class="form-label mb-1">Ejercicio</label>
+        <select [(ngModel)]="nuevoEjercicio.codEjercicio" name="ejercicio" class="form-select" required>
+          <option [ngValue]="null" disabled selected>Seleccione un ejercicio</option>
+          <option *ngFor="let ejercicio of ejerciciosDisponibles" [ngValue]="ejercicio.codEjercicio">
+            {{ ejercicio.nombre }}
+          </option>
+        </select>
       </div>
+
       <div class="col-md-4">
-        <input [(ngModel)]="nuevoEjercicio.repeticiones" name="nuevoReps" class="form-control" placeholder="Reps" required />
+        <label class="form-label mb-1">Repeticiones</label>
+        <input type="number" [(ngModel)]="nuevoEjercicio.numeroRepeticiones" name="nuevoReps" class="form-control"
+          placeholder="Reps" required />
       </div>
+
       <div class="col-md-4">
-        <input [(ngModel)]="nuevoEjercicio.series" name="nuevoSeries" class="form-control" placeholder="Series" required />
+        <label class="form-label mb-1">Series</label>
+        <input type="number" [(ngModel)]="nuevoEjercicio.numeroSeries" name="nuevoSeries" class="form-control"
+          placeholder="Series" required />
       </div>
     </div>
 
@@ -63,7 +75,7 @@
     <table class="table table-bordered table-striped">
       <thead class="table-dark">
         <tr>
-          <th>Código</th>
+          <th>Nombre</th>
           <th>Reps</th>
           <th>Series</th>
           <th>Acciones</th>
@@ -71,11 +83,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let ej of rutinaSeleccionada.ejercicios">
-          <td>{{ ej.codEjercicio }}</td>
-          <td>{{ ej.repeticiones }}</td>
-          <td>{{ ej.series }}</td>
+          <td>{{ ej.nombreEjercicio }}</td>
+          <td>{{ ej.numeroRepeticiones }}</td>
+          <td>{{ ej.numeroSeries }}</td>
           <td>
-            <button class="btn btn-danger btn-sm" (click)="eliminarEjercicio(ej)">Eliminar</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminarAsignacion(ej, rutinaSeleccionada)">Eliminar</button>
           </td>
         </tr>
       </tbody>

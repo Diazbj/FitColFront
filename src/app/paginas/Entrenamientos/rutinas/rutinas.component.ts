@@ -5,6 +5,7 @@ import { crearRutinaCompletaDTO } from '../../../dto/rutina/crear-rutina-complet
 // Removed unused import 'ejercicioRutinaDTO'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { EjercicioService } from '../../../servicios/ejercicio.service';
 
 @Component({
   selector: 'app-rutinas',
@@ -28,21 +29,23 @@ export class RutinasComponent implements OnInit {
   rutinaSeleccionada: any = null;
 
   nuevoEjercicio: any = {
-    codEjercicio: 0,
-    repeticiones: 0,
-    series: 0
-  };
+  codEjercicio: null,
+  numeroRepeticiones: 0,
+  numeroSeries: 0
+};
 
 
   constructor(
     private rutinaService: RutinaService,
-    private planEntrenamientoService: PlanEntrenamientoService
+    private planEntrenamientoService: PlanEntrenamientoService,
+    private ejercicioService: EjercicioService
+    
   ) { }
-
+  ejerciciosDisponibles: any[] = [];
   ngOnInit(): void {
     this.cargarPlanes();
     this.cargarRutinas();
-
+    this.cargarEjercicios();
   }
 
   cargarPlanes() {
@@ -55,8 +58,18 @@ export class RutinasComponent implements OnInit {
     });
   }
 
+  cargarEjercicios() {
+    this.ejercicioService.obtenerEjercicios().subscribe({
+      next: (resp: any) => {
+        console.log('Ejercicios obtenidos:', resp.mensaje); // ← Agrega esto
+        this.ejerciciosDisponibles = resp.mensaje || [];
+      },
+      error: err => console.error('Error cargando ejercicios:', err)
+    });
+  }
+
   agregarEjercicio() {
-    this.nuevaRutina.ejercicios.push({ codEjercicio: 0, repeticiones: 0, series: 0 });
+    this.nuevaRutina.ejercicios.push({ numeroRepeticiones: 0, numeroSeries: 0 , codEjercicio: 0 });
   }
 
   crearRutina() {
@@ -67,7 +80,7 @@ export class RutinasComponent implements OnInit {
 
     // Validar que los ejercicios tienen datos válidos
     const ejerciciosInvalidos = this.nuevaRutina.ejercicios.some(e =>
-      !e.codEjercicio || e.repeticiones <= 0 || e.series <= 0
+      !e.codEjercicio || e.numeroRepeticiones <= 0 || e.numeroSeries <= 0
     );
 
     if (ejerciciosInvalidos) {
@@ -87,16 +100,47 @@ export class RutinasComponent implements OnInit {
     });
   }
 
+  crearEjercicio() {
+    console.log('Intentando crear ejercicio:', this.nuevoEjercicio);
 
-  cargarRutinas() {
-    this.rutinaService.listarRutinas().subscribe({
-      next: (resp: any) => {
-        console.log('Rutinas obtenidas:', resp.mensaje);
-        this.rutinas = resp.mensaje || []; // ← Asegúrate de que 'mensaje' contiene el array de rutinas
+    if (!this.nuevoEjercicio.nombre.trim() || this.nuevoEjercicio.numeroRepeticiones <= 0 || this.nuevoEjercicio.numeroSeries <= 0) {
+      alert('Completa todos los datos del ejercicio');
+      console.warn('Datos incompletos:', this.nuevoEjercicio);
+      return;
+    }
+
+    this.ejercicioService.crearEjercicio(this.nuevoEjercicio).subscribe({
+      next: resp => {
+        console.log('Respuesta del backend al crear ejercicio:', resp);
+        alert('Ejercicio creado correctamente');
+        this.nuevoEjercicio = { nombre: '', numeroRepeticiones: 0, numeroSeries: 0 };
+        this.cargarEjercicios();
       },
-      error: err => console.error('Error cargando rutinas:', err)
+      error: err => {
+        console.error('Error creando ejercicio:', err);
+        alert('Error al crear ejercicio');
+      }
     });
   }
+
+
+  cargarRutinas() {
+  this.rutinaService.listarRutinas().subscribe({
+    next: (resp: any) => {
+      console.log('Rutinas obtenidas:', resp.mensaje);
+      this.rutinas = resp.mensaje || [];
+
+      // Asegura que rutinaSeleccionada también se actualiza
+      if (this.rutinaSeleccionada && this.rutinaSeleccionada.codRutina) {
+        const actualizada = this.rutinas.find(r => r.codRutina === this.rutinaSeleccionada.codRutina);
+        if (actualizada) {
+          this.rutinaSeleccionada = actualizada;
+        }
+      }
+    },
+    error: err => console.error('Error cargando rutinas:', err)
+  });
+}
 
   editarRutina(rutina: any) {
     rutina.backup = { ...rutina }; // copia de seguridad
@@ -141,22 +185,69 @@ export class RutinasComponent implements OnInit {
 }
 
 mostrarEjercicios() {
-  this.nuevoEjercicio = { codEjercicio: 0, repeticiones: 0, series: 0 };
+  this.nuevoEjercicio = { codEjercicio: 0, numeroRepeticiones: 0, numeroSeries: 0 };
 }
 
 agregarEjercicioARutinaSeleccionada() {
   const e = this.nuevoEjercicio;
-  if (!e.codEjercicio || e.repeticiones <= 0 || e.series <= 0) {
+
+  if (!e.codEjercicio || e.numeroRepeticiones <= 0 || e.numeroSeries <= 0) {
     alert('Completa todos los datos del ejercicio');
     return;
   }
 
-  this.rutinaSeleccionada.ejercicios.push({ ...e });
-  this.nuevoEjercicio = { codEjercicio: 0, repeticiones: 0, series: 0 };
+  if (!this.rutinaSeleccionada || !this.rutinaSeleccionada.codRutina) {
+    alert('No hay una rutina seleccionada');
+    return;
+  }
+
+  const dto = {
+    codRutina: this.rutinaSeleccionada.codRutina,
+    codEjercicio: e.codEjercicio,
+    numeroRepeticiones: e.numeroRepeticiones,
+    numeroSeries: e.numeroSeries
+  };
+
+  this.ejercicioService.asignarEjercicioARutina(dto).subscribe({
+    next: (resp: any) => {
+      const ejercicioSeleccionado = this.ejerciciosDisponibles.find(ej => ej.codEjercicio === e.codEjercicio);
+
+      if (!this.rutinaSeleccionada.ejercicios) {
+        this.rutinaSeleccionada.ejercicios = [];
+      }
+
+      this.rutinaSeleccionada.ejercicios.push({
+        codEjercicio: e.codEjercicio,
+        nombreEjercicio: ejercicioSeleccionado?.nombre || 'Desconocido',
+        numeroRepeticiones: e.numeroRepeticiones,
+        numeroSeries: e.numeroSeries
+      });
+
+      alert('Ejercicio asignado correctamente a la rutina');
+      this.nuevoEjercicio = { codEjercicio: null, numeroRepeticiones: 0, numeroSeries: 0 };
+    },
+    error: err => {
+      console.error('Error asignando ejercicio a rutina:', err);
+      alert('Hubo un error al asignar el ejercicio');
+    }
+  });
 }
 
-eliminarEjercicio(ejercicio: any) {
-  this.rutinaSeleccionada.ejercicios = this.rutinaSeleccionada.ejercicios.filter((e: { codEjercicio: number; repeticiones: number; series: number }) => e !== ejercicio);
+eliminarAsignacion(ejercicio: any, rutina: any) {
+  const confirmado = confirm(`¿Estás seguro de eliminar el ejercicio "${ejercicio.nombre}" de la rutina "${rutina.nombre}"?`);
+  if (!confirmado) return;
+
+  this.ejercicioService.eliminarAsignacionEjercicioARutina(ejercicio.codEjercicio, rutina.codRutina).subscribe({
+    next: resp => {
+      alert('Asignación eliminada correctamente');
+      this.cargarRutinas(); // Recarga las rutinas para reflejar el cambio
+      this.mostrarEjercicios(); // Resetea el formulario de ejercicio
+    },
+    error: err => {
+      console.error('Error al eliminar asignación:', err);
+      alert('Error eliminando asignación');
+    }
+  });
 }
 
 editarEjercicio(ejercicio: any) {
