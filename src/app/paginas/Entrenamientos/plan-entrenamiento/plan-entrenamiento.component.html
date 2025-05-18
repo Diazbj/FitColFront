@@ -1,5 +1,10 @@
 <div class="container">
-    <h2>Crear Entrenamiento</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Entrenamiento</h2>
+        <span class="badge bg-gradient-success text-dark ms-2" *ngIf="idEditando !== null">Editando</span>
+
+    </div>
+    
 
     <!-- Formulario para crear/editar planes de entrenamiento -->
     <form [formGroup]="registroPlanEntrenamientoForm" (ngSubmit)="submitFormulario()">
@@ -54,13 +59,13 @@
         </div>
 
         <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-primary" [disabled]="registroPlanEntrenamientoForm.invalid">
+            <button type="submit" class="btn btn-success" [disabled]="registroPlanEntrenamientoForm.invalid">
             {{ idEditando !== null ? 'Actualizar' : 'Guardar' }}
             </button>
             <button type="button" class="btn btn-secondary" (click)="registroPlanEntrenamientoForm.reset()">
             Limpiar
             </button>
-            <button type="button" class="btn btn-warning" *ngIf="idEditando !== null" (click)="cancelarEdicion()">
+            <button type="button" class="btn btn-secondary" *ngIf="idEditando !== null" (click)="cancelarEdicion()">
             Cancelar edición
             </button>
         </div>
@@ -73,7 +78,7 @@
     <!-- Tabla para mostrar planes de entrenamiento -->
 
     <div class="card shadow">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header bg-success text-white">
         <h5 class="mb-0">Planes de Entrenamiento</h5>
     </div>
     <table class="table table-bordered table-hover">

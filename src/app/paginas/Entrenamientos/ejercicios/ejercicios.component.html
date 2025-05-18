@@ -1,5 +1,10 @@
 <form [formGroup]="registroEjercicioForm" (ngSubmit)="onSubmit()" class="mb-4 p-4 rounded shadow bg-white">
-    <h4 class="mb-4">{{ idEditando !== null ? 'Editar Ejercicio' : 'Nuevo Ejercicio' }}</h4>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-4">{{ idEditando !== null ? 'Ejercicio' : 'Ejercicio' }}</h4>
+        <span class="badge bg-gradient-success text-dark ms-2" *ngIf="idEditando !== null">Editando</span>
+    </div>
+    
+    
     <div class="row mb-3">
         <div class="col-md-6 mb-3 mb-md-0">
             <label for="nombre" class="form-label">Nombre</label>
@@ -12,11 +17,11 @@
     </div>
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <button type="submit" class="btn btn-primary me-2" [disabled]="registroEjercicioForm.invalid">
+            <button type="submit" class="btn btn-success me-2" [disabled]="registroEjercicioForm.invalid">
                 <i class="bi" [ngClass]="idEditando !== null ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
                 {{ idEditando !== null ?  'Actualizar Ejercicio' : 'Crear Ejercicio' }}
             </button>
-            <span class="badge bg-info text-dark ms-2" *ngIf="idEditando !== null">Editando</span>
+            
         </div>
         <div>
             <button *ngIf="idEditando !== null" type="button" class="btn btn-secondary me-2" (click)="cancelarEdicion()">
@@ -30,7 +35,7 @@
 </form>
 
 <div class="card shadow">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header bg-success text-white">
         <h5 class="mb-0">Lista de Ejercicios</h5>
     </div>
     <div class="card-body p-0">

@@ -12,8 +12,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;    // declaras con non-null assertion
+  loginForm!: FormGroup;
   errorMessage = '';
+  isLoading = false; // <-- agrega esta línea
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +23,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // al iniciar el componente ya existe fb
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(7)]]
@@ -31,11 +31,17 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.invalid) return;
+    this.isLoading = true; // <-- activa el loading
     const { email, password } = this.loginForm.value;
-    console.log('Enviando:', email, password);
     this.auth.login(email!, password!).subscribe({
-      next: () => this.router.navigate(['/perfil']),
-      error: () => this.errorMessage = 'Credenciales incorrectas'
+      next: () => {
+        this.isLoading = false; // <-- desactiva al terminar
+        this.router.navigate(['/perfil']);
+      },
+      error: () => {
+        this.isLoading = false; // <-- desactiva al fallar
+        this.errorMessage = 'Credenciales incorrectas';
+      }
     });
   }
 }

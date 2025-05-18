@@ -1,5 +1,5 @@
-<div class="container mt-5">
-    <h5 class="mb-4">
+<div class="container mt-5 ">
+    <h5 class="mb-4 ">
         <i class="fas fa-person-running"></i> Gestión de Entrenamientos
     </h5>
 
@@ -9,6 +9,7 @@
             <li class="nav-item">
                 <a 
                     class="nav-link" 
+                    [ngClass]="{'text-success': selectedTab !== 'plan-entrenamiento', 'text-dark': selectedTab === 'plan-entrenamiento'}"
                     [class.active]="selectedTab === 'plan-entrenamiento'" 
                     (click)="selectedTab = 'plan-entrenamiento'">
                     Plan de Entrenamiento
@@ -17,6 +18,7 @@
             <li class="nav-item">
                 <a 
                     class="nav-link" 
+                    [ngClass]="{'text-success': selectedTab !== 'rutinas', 'text-dark': selectedTab === 'rutinas'}"
                     [class.active]="selectedTab === 'rutinas'" 
                     (click)="selectedTab = 'rutinas'">
                     Rutinas
@@ -25,6 +27,7 @@
             <li class="nav-item">
                 <a 
                     class="nav-link" 
+                    [ngClass]="{'text-success': selectedTab !== 'ejercicios', 'text-dark': selectedTab === 'ejercicios'}"
                     [class.active]="selectedTab === 'ejercicios'" 
                     (click)="selectedTab = 'ejercicios'">
                     Ejercicios

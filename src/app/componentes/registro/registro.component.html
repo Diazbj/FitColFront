@@ -6,9 +6,10 @@
   <!-- Navegación para seleccionar el rol -->
   <nav>
     <ul class="nav nav-tabs">
-      <li class="nav-item">
+      <li class="nav-item bg-gradient-success">
         <a 
-          class="nav-link" 
+          class="nav-link " 
+          [ngClass]="{'text-success': selectedTab !== 'cliente', 'text-dark': selectedTab === 'cliente'}"
           [class.active]="selectedTab === 'cliente'" 
           (click)="selectedTab = 'cliente'">
           Cliente
@@ -17,6 +18,7 @@
       <li class="nav-item">
         <a 
           class="nav-link" 
+          [ngClass]="{'text-success': selectedTab !== 'entrenador', 'text-dark': selectedTab === 'entrenador'}"
           [class.active]="selectedTab === 'entrenador'" 
           (click)="selectedTab = 'entrenador'">
           Entrenador
@@ -25,6 +27,7 @@
       <li class="nav-item">
         <a 
           class="nav-link" 
+          [ngClass]="{'text-success': selectedTab !== 'nutricionista', 'text-dark': selectedTab === 'nutricionista'}"
           [class.active]="selectedTab === 'nutricionista'" 
           (click)="selectedTab = 'nutricionista'">
           Nutricionista
@@ -34,7 +37,7 @@
   </nav>
 
   <!-- Mostrar dinámicamente cada formulario -->
-  <div class="card shadow-lg p-4 mt-3">
+  <div class="card shadow-lg p-4 mt-3 text-success">
     <app-registro-cliente *ngIf="selectedTab === 'cliente'"></app-registro-cliente>
     <app-registro-entrenador *ngIf="selectedTab === 'entrenador'"></app-registro-entrenador>
     <app-registro-nutricionista *ngIf="selectedTab === 'nutricionista'"></app-registro-nutricionista>
