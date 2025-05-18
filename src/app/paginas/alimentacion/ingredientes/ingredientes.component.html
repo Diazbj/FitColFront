@@ -1,0 +1,46 @@
+<div class="card shadow mb-4">
+    <div class="card-header bg-gradient-success text-white">
+        <h5 class="mb-0">Agregar Ingrediente</h5>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="regisIngredientesForm" (ngSubmit)="crearIngrediente()">
+            <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" formControlName="nombre" required>
+            </div>
+            <div class="mb-3">
+            <label for="precioPromedio" class="form-label">Precio Promedio</label>
+            <input type="number" id="precioPromedio" class="form-control" formControlName="precioPromedio" required min="0">
+            </div>
+            <button type="submit" class="btn btn-success" [disabled]="regisIngredientesForm.invalid">Agregar</button>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-gradient-success text-white">
+        <h5 class="mb-0">Lista de Ingredientes</h5>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ingrediente of ingredientes">
+                    <td>{{ ingrediente.nombre }}</td>
+                    <td>{{ ingrediente.precioPromedio }}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" (click)="eliminarIngrediente(ingrediente)">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -5,6 +5,7 @@ import { RegistroComponent } from './componentes/registro/registro.component';
 import { PerfilComponent } from './componentes/perfil/perfil.component'; // Única ruta de registro
 import { GestionPlanEntrenamientoComponent } from './componentes/gestion-plan-entrenamiento/gestion-plan-entrenamiento.component';
 import { PlanEntrenamientoComponent } from './paginas/Entrenamientos/plan-entrenamiento/plan-entrenamiento.component';
+import { GestionPlanAlimenticioComponent } from './componentes/gestion-plan-alimenticio/gestion-plan-alimenticio.component';
 
 export const routes: Routes = [
    { path: '', component: InicioComponent },
@@ -12,5 +13,6 @@ export const routes: Routes = [
    { path: 'registro', component: RegistroComponent },
    {path: 'perfil',component:PerfilComponent},
    {path: 'gestion-plan-entrenamiento', component: GestionPlanEntrenamientoComponent},
+   {path: 'gestion-plan-alimenticio', component: GestionPlanAlimenticioComponent},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];

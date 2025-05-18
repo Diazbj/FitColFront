@@ -1,0 +1,45 @@
+<div class="container mt-5 ">
+    <h5 class="mb-4 ">
+        <i class="fas fa-person-running"></i> Gestión de nutricion
+    </h5>
+
+    <!-- Navegación para seleccionar la sección -->
+    <nav>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a 
+                    class="nav-link" 
+                    [ngClass]="{'text-success': selectedTab !== 'plan-alimenticio', 'text-dark': selectedTab === 'plan-alimenticio'}"
+                    [class.active]="selectedTab === 'plan-alimenticio'" 
+                    (click)="selectedTab = 'plan-alimenticio'">
+                    Plan de alimentación
+                </a>
+            </li>
+            <li class="nav-item">
+                <a 
+                    class="nav-link" 
+                    [ngClass]="{'text-success': selectedTab !== 'comidas', 'text-dark': selectedTab === 'comidas'}"
+                    [class.active]="selectedTab === 'comidas'" 
+                    (click)="selectedTab = 'comidas'">
+                    Comidas
+                </a>
+            </li>
+            <li class="nav-item">
+                <a 
+                    class="nav-link" 
+                    [ngClass]="{'text-success': selectedTab !== 'ingredientes', 'text-dark': selectedTab === 'ingredientes'}"
+                    [class.active]="selectedTab === 'ingredientes'" 
+                    (click)="selectedTab = 'ingredientes'">
+                    Ingredientes
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Mostrar dinámicamente cada sección -->
+    <div class="card shadow-lg p-4 mt-3">
+        <app-plan-alimenticio *ngIf="selectedTab === 'plan-alimenticio'"></app-plan-alimenticio>
+        <app-comidas *ngIf="selectedTab === 'comidas'"></app-comidas>
+        <app-ingredientes *ngIf="selectedTab === 'ingredientes'"></app-ingredientes>
+    </div>
+</div>

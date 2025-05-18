@@ -11,6 +11,9 @@
         <ng-container *ngIf="(isLoggedIn$ | async) === true && rolActual === 'ROLE_ENTRENADOR'">
           <li><a routerLink="/gestion-plan-entrenamiento" class="nav-link px-2 text-white">Gestión de planes</a></li>
         </ng-container>
+        <ng-container *ngIf="(isLoggedIn$ | async) === true && rolActual === 'ROLE_NUTRICIONISTA'">
+          <li><a routerLink="/gestion-plan-alimenticio" class="nav-link px-2 text-white">Gestión de planes</a></li>
+        </ng-container>
       </ul>
 
       <div class="text-end">
