@@ -57,7 +57,7 @@ export class IngredientesComponent implements OnInit {
     this.ingredienteService.obtenerIngredientes().subscribe({
       next: (resp: any) => {
         console.log('Ingredientes cargados:', resp);
-        this.ingredientes = resp;
+        this.ingredientes = resp.mensaje || [];
       },
       error: err => console.error('Error cargando ingredientes:', err)
     });
