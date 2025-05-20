@@ -48,7 +48,6 @@ export class IngredientesComponent implements OnInit {
     this.regisIngredientesForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.maxLength(100)]],
       precioPromedio: [null, [Validators.required, Validators.min(0)]],
-      codComida: [null, Validators.required], // ✅ Nuevo campo
     });
   }
   crearIngrediente() {
