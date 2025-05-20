@@ -6,13 +6,17 @@ import { PerfilComponent } from './componentes/perfil/perfil.component'; // Úni
 import { GestionPlanEntrenamientoComponent } from './componentes/gestion-plan-entrenamiento/gestion-plan-entrenamiento.component';
 import { PlanEntrenamientoComponent } from './paginas/Entrenamientos/plan-entrenamiento/plan-entrenamiento.component';
 import { GestionPlanAlimenticioComponent } from './componentes/gestion-plan-alimenticio/gestion-plan-alimenticio.component';
+import { InicioUsuarioComponent } from './paginas/inicio-usuario/inicio-usuario.component';
+import { AuthGuard } from './servicios/authGuard'; 
+import { NoAuthGuard } from './servicios/noAuthGuard'; 
 
 export const routes: Routes = [
-   { path: '', component: InicioComponent },
-   { path: 'login', component: LoginComponent },
-   { path: 'registro', component: RegistroComponent },
-   {path: 'perfil',component:PerfilComponent},
-   {path: 'gestion-plan-entrenamiento', component: GestionPlanEntrenamientoComponent},
-   {path: 'gestion-plan-alimenticio', component: GestionPlanAlimenticioComponent},
+   { path: '', component: InicioComponent,canActivate: [NoAuthGuard] },
+   { path: 'login', component: LoginComponent,canActivate: [NoAuthGuard] },
+   { path: 'registro', component: RegistroComponent,canActivate: [NoAuthGuard] },
+   {path: 'perfil',component:PerfilComponent,canActivate: [AuthGuard]},
+   {path: 'gestion-plan-entrenamiento', component: GestionPlanEntrenamientoComponent,canActivate: [AuthGuard]},
+   {path: 'gestion-plan-alimenticio', component: GestionPlanAlimenticioComponent,canActivate: [AuthGuard]},
+   {path: 'inicio-usuario', component: InicioUsuarioComponent,canActivate: [AuthGuard]},
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];

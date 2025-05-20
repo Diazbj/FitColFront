@@ -1,0 +1,47 @@
+<div class="container mt-4">
+  <h4 class="text-success text-center mb-4">
+    🏆 <strong>Top 5 Clientes más Activos</strong>
+  </h4>
+
+  <div *ngIf="errorMensaje" class="alert alert-danger text-center">
+    {{ errorMensaje }}
+  </div>
+
+  <div *ngIf="ranking.length > 0; else sinRanking">
+    <div class="card p-4 shadow-sm rounded-4 border-0 bg-light">
+      <div *ngFor="let cliente of ranking; let i = index" class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-1 ">
+          <div class="d-flex align-items-center gap-2 ">
+            <span class="fs-5 fw-semibold ">
+              {{ i + 1 }}️⃣ {{ cliente.primerNombre }} {{ cliente.segundoApellido }}
+            </span>
+          </div>
+          <span class="badge text-bg-dark rounded-pill">
+            {{ cliente.totalEntCompletos }} entrenamientos
+          </span>
+        </div>
+
+        <div class="progress" style="height: 20px;">
+          <div
+            class="progress-bar bg-gradient-success"
+            [ngClass]="{
+              'bg-warning': i === 0,
+              'bg-secondary': i === 1,
+              'bg-info': i === 2,
+              'bg-success': i > 2
+            }"
+            role="progressbar"
+            [style.width.%]="(cliente.totalEntCompletos / ranking[0].totalEntCompletos) * 100"
+            [attr.aria-valuenow]="cliente.totalEntCompletos"
+            aria-valuemin="0"
+            [attr.aria-valuemax]="ranking[0].totalEntCompletos">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #sinRanking>
+    <p class="text-muted text-center">No hay datos de ranking disponibles.</p>
+  </ng-template>
+</div>

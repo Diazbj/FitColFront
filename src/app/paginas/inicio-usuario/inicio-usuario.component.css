@@ -1,0 +1,28 @@
+.text-gradient-success {
+    background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+    color: #fff !important;
+}
+.text-gradient-success {
+  background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-success {
+  background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+  color: #fff !important;
+}
+
+.chart {
+  display: block;
+  height: 300px;
+  width: 100%;
+}
