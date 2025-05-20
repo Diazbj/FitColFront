@@ -6,6 +6,16 @@
 }
 
 .bg-gradient-success {
-    background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
-    color: #fff !important;
+  background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+  color: #fff !important;
+}
+
+.bg-gradient-info {
+  background: linear-gradient(90deg, #0dcaf0 40%, #0a58ca 100%);
+  color: #fff !important;
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(90deg, #ffc107 40%, #d39e00 100%);
+  color: #fff !important;
 }

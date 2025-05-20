@@ -40,5 +40,20 @@ export class ComidaService {
     });
   }
 
+  asignarComidaAPlan(dto: any): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.post<MensajeDTO>(`${this.apiUrl}/asignarPlan`, dto, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  listarComidasPorPlan(id: number): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/plan/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+
 
 }

@@ -30,4 +30,17 @@ export class IngredienteService {
         headers: { Authorization: `Bearer ${token}` }
         });
     }
+    asignarIngredienteAComida(dto: any): Observable<MensajeDTO> {
+        const token = this.authService.getToken();
+        return this.http.post<MensajeDTO>(`${this.apiUrl}/asignarIngrdiente`, dto, {
+        headers: { Authorization: `Bearer ${token}` }
+        });
+    }
+
+    obtenerIngredientesPorComida(id: number): Observable<MensajeDTO> {
+        const token = this.authService.getToken();
+        return this.http.get<MensajeDTO>(`${this.apiUrl}/comida/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+        });
+    }
 }

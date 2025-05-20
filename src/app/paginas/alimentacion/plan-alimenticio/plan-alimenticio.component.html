@@ -1,1 +1,94 @@
-<p>plan-alimenticio works!</p>
+<div class="container mt-4">
+  <!-- Título y estado de edición -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-gradient-success mb-0">Plan Alimenticio</h2>
+    <span *ngIf="idEditando !== null" class="badge bg-gradient-success text-white">Editando</span>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="registroPlanAlimenticioForm"
+        (ngSubmit)="idEditando !== null ? actualizarPlan() : crearPlanAlimenticio()"
+        class="card p-4 shadow-sm mb-4">
+    <h5 class="card-title mb-3">{{ idEditando !== null ? 'Editar Plan' : 'Crear Nuevo Plan' }}</h5>
+
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" id="nombre" formControlName="nombre" class="form-control" />
+      <div *ngIf="registroPlanAlimenticioForm.get('nombre')?.invalid && registroPlanAlimenticioForm.get('nombre')?.touched"
+           class="text-danger mt-1">
+        El nombre es requerido y debe tener un máximo de 100 caracteres.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="duracion" class="form-label">Duración (en semanas)</label>
+      <input type="number" id="duracion" formControlName="duracion" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="objetivo" class="form-label">Objetivo</label>
+      <input type="text" id="objetivo" formControlName="objetivo" class="form-control" placeholder="Objetivo" />
+      <div *ngIf="registroPlanAlimenticioForm.get('objetivo')?.invalid && registroPlanAlimenticioForm.get('objetivo')?.touched"
+           class="text-danger mt-1">
+        El objetivo es requerido y debe tener un máximo de 100 caracteres.
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea id="descripcion" formControlName="descripcion" class="form-control"></textarea>
+      <div *ngIf="registroPlanAlimenticioForm.get('descripcion')?.invalid && registroPlanAlimenticioForm.get('descripcion')?.touched"
+           class="text-danger mt-1">
+        La descripción es requerida y debe tener un máximo de 255 caracteres.
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-success w-50" [disabled]="registroPlanAlimenticioForm.invalid">
+        {{ idEditando !== null ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button type="button" class="btn btn-secondary w-50" (click)="registroPlanAlimenticioForm.reset()">
+        Limpiar
+      </button>
+    </div>
+  </form>
+
+  <!-- Tabla de planes alimenticios -->
+  <div class="card shadow">
+    <div class="card-header bg-gradient-success text-white">
+      <h5 class="mb-0">Planes Alimenticios Registrados</h5>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Semanas</th>
+            <th>Objetivo</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let plan of planesAlimenticios" (click)="cargarFormulario(plan)">
+            <td>{{ plan.nombre }}</td>
+            <td>{{ plan.duracion }}</td>
+            <td>{{ plan.objetivo }}</td>
+            <td>{{ plan.descripcion }}</td>
+            <td>
+              <button class="btn btn-sm btn-danger"
+                      (click)="eliminarPlan(plan.codPlanAlimenticio); $event.stopPropagation()">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="mensaje" class="alert alert-info m-3">
+      {{ mensaje }}
+    </div>
+  </div>
+</div>

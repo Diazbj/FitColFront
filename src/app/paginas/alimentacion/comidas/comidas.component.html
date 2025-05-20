@@ -1,126 +1,112 @@
-<!-- Formulario para agregar comida -->
-<div class="card shadow mb-4">
-    <div class="card-header bg-gradient-success text-white">
-        <h5 class="mb-0">Agregar Comida</h5>
-    </div>
-    <div class="card-body">
-        <form [formGroup]="regisComidasForm" (ngSubmit)="crearComida()">
-            <div class="mb-3">
-                <label class="form-label">Nombre</label>
-                <input type="text" formControlName="nombre" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Porción (Calorías)</label>
-                <input type="number" formControlName="porcion" class="form-control" required min="0">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Proteínas</label>
-                <input type="number" formControlName="proteinas" class="form-control" required min="0">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Carbohidratos</label>
-                <input type="number" formControlName="carbohidratos" class="form-control" required min="0">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Grasas</label>
-                <input type="number" formControlName="grasa" class="form-control" required min="0">
-            </div>
-            <div class="mb-4">
-                <label class="form-label">Ingredientes</label>
-                <div class="input-group mb-2">
-                    <select #ingredienteSelect class="form-select">
-                        <option *ngFor="let ingrediente of ingredientes" [value]="ingrediente.nombre">
-                            {{ ingrediente.nombre }}
-                        </option>
-                    </select>
-                    <button type="button" class="btn btn-outline-primary"
-                        (click)="agregarIngrediente(ingredienteSelect.value)">
-                        Agregar Ingrediente
-                    </button>
-                </div>
-                <div class="mt-3">
-                    <button *ngIf="!comidaSeleccionada" type="submit" [disabled]="regisComidasForm.invalid"
-                        class="btn btn-success fw-bold px-4">
-                        Agregar Comida
-                    </button>
-                    <button *ngIf="comidaSeleccionada" type="button" [disabled]="regisComidasForm.invalid"
-                        (click)="editarComida()" class="btn btn-warning fw-bold px-4">
-                        Guardar Cambios
-                    </button>
-                    <button *ngIf="comidaSeleccionada" type="button" class="btn btn-secondary ms-2"
-                        (click)="cancelarEdicion()">
-                        Cancelar
-                    </button>
-                </div>
-                <div *ngIf="regisComidasForm.value.ingredientes?.length">
-                    <span *ngFor="let ing of regisComidasForm.value.ingredientes; let i = index"
-                        class="badge bg-success me-1">
-                        {{ ing }}
-                        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Eliminar"
-                            (click)="eliminarIngrediente(i)"></button>
-                    </span>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Tabla de comidas -->
-<div class="card shadow">
-    <div class="card-header bg-gradient-success text-white">
-        <h5 class="mb-0">Lista de Comidas</h5>
-    </div>
-    <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Calorías</th>
-                    <th>Proteínas</th>
-                    <th>Carbohidratos</th>
-                    <th>Grasas</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let comida of comidas">
-                    <td>{{ comida.nombre }}</td>
-                    <td>{{ comida.porcion }}</td>
-                    <td>{{ comida.proteinas }}</td>
-                    <td>{{ comida.carbohidratos }}</td>
-                    <td>{{ comida.grasa }}</td>
-
-                    <td>
-                        <button (click)="seleccionarComida(comida)" class="btn btn-outline-success btn-sm me-2">
-                            <i class="bi bi-pencil"></i> Editar
-                        </button>
-                        <button (click)="eliminarComida(comida)" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-trash"></i> Eliminar
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Tabla de ingredientes de la comida seleccionada -->
-    <div *ngIf="comidaSeleccionada && comidaSeleccionada.ingredientes?.length" class="card shadow mt-4">
-        <div class="card-header bg-gradient-info text-white">
-            <h5 class="mb-0">Ingredientes de {{ comidaSeleccionada.nombre }}</h5>
+<div class="container mt-4">
+    <!-- Formulario de creación/edición de comida -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-gradient-success text-white">
+            <h5 class="mb-0">{{ comidaSeleccionada ? 'Editar Comida' : 'Crear Nueva Comida' }}</h5>
         </div>
-        <div class="card-body p-0">
-            <table class="table table-striped mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Ingrediente</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let ing of comidaSeleccionada.ingredientes">
-                        <td>{{ ing }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card-body">
+            <form [formGroup]="regisComidasForm" (ngSubmit)="comidaSeleccionada ? editarComida() : crearComida()">
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" formControlName="nombre" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Porción (g)</label>
+                    <input type="number" formControlName="porcion" class="form-control" required />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Proteínas (g)</label>
+                        <input type="number" formControlName="proteinas" class="form-control" required />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Carbohidratos (g)</label>
+                        <input type="number" formControlName="carbohidratos" class="form-control" required />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Grasas (g)</label>
+                        <input type="number" formControlName="grasa" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Asignar a Plan Alimenticio</label>
+                    <select formControlName="codPlanAlimenticio" class="form-select" required>
+                        <option [ngValue]="null" disabled selected>Seleccione un plan</option>
+                        <option *ngFor="let plan of planes" [value]="plan.codPlanAlimenticio">{{ plan.nombre }}</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    {{ comidaSeleccionada ? 'Actualizar Comida' : 'Crear Comida' }}
+                </button>
+
+                <button *ngIf="comidaSeleccionada" type="button" class="btn btn-secondary w-100 mt-2"
+                    (click)="cancelarEdicion()">
+                    Cancelar Edición
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sección de filtrado por plan alimenticio -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-gradient-success text-white">
+            <h5 class="mb-0">Ver Comidas por Plan Alimenticio</h5>
+        </div>
+        <div class="card-body ">
+            <div class="mb-3 ">
+                <label class="form-label">Seleccionar Plan Alimenticio</label>
+                <select [(ngModel)]="planSeleccionado" (change)="cargarComidasPorPlan(planSeleccionado)"
+                    class="form-select">
+                    <option [ngValue]="null" disabled selected>Seleccione un plan</option>
+                    <option *ngFor="let plan of planes" [value]="plan.codPlanAlimenticio">{{ plan.nombre }}</option>
+                </select>
+            </div>
+
+            <!-- Tabla de comidas -->
+            <div class="card-shadow-sm">
+                <div class="card-header bg-gradient-success text-white">
+                    <h5 class="mb-0">Comidas Asociadas al Plan Alimenticio Seleccionado</h5>
+                </div>
+
+
+                <div *ngIf="comidasPorPlan.length > 0" class="table-responsive ">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Porción</th>
+                                <th>Proteínas</th>
+                                <th>Carbohidratos</th>
+                                <th>Grasa</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let comida of comidasPorPlan">
+                                <td>{{ comida.nombre }}</td>
+                                <td>{{ comida.porcion }}</td>
+                                <td>{{ comida.proteinas }}</td>
+                                <td>{{ comida.carbohidratos }}</td>
+                                <td>{{ comida.grasa }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary me-1"
+                                        (click)="cargarComidaEnFormulario(comida)">Editar</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        (click)="eliminarComida(comida.codComida)">Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="comidasPorPlan.length === 0" class="text-muted">
+                    No hay comidas asociadas al plan seleccionado.
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
