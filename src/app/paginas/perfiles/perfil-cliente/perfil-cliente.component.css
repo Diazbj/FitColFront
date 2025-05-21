@@ -1,0 +1,16 @@
+.text-gradient-success {
+    background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(90deg, #198754 40%, #0f5132 100%);
+    color: #fff !important;
+}
+canvas {
+  display: block;
+  width: 100% !important;
+  height: 150px !important;
+}

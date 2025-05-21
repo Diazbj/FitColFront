@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { EditarClienteDTO } from '../../../dto/cliente/editar-cliente-dto';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RecomendacionEntrenamientoDTO } from '../../../dto/cliente/recomendacion-entrenamientodto';
+import { ProgresoSemanalDTO } from '../../../dto/cliente/progreso-semanaldto';
+
 @Component({
   selector: 'app-perfil-cliente',
   standalone: true,
@@ -17,12 +20,15 @@ export class PerfilClienteComponent implements OnInit {
   usuario!: ClienteDTO;
   editando: boolean = false;
   usuarioEditado: EditarClienteDTO = {} as EditarClienteDTO;
+  progresoSemanal: ProgresoSemanalDTO[] = [];
 
   constructor(private router: Router, private authService: AuthService,private clienteService: ClienteService) {}
 
   telefonosString: string = '';
 
 ngOnInit() {
+  this.obtenerRecomendacionEntrenamiento();
+  this.obtenerProgresoSemanal();
   this.clienteService.obtenerCliente().subscribe({
     next: (res) => {
       const cliente = res.mensaje;
@@ -90,4 +96,45 @@ ngOnInit() {
       telefonos: cliente.telefonos ?? []
     };
   }
+
+  recomendacion: RecomendacionEntrenamientoDTO | null = null;
+
+obtenerRecomendacionEntrenamiento() {
+  console.log("Llamando al servicio de recomendación...");
+
+  this.clienteService.obtenerRecomendacionEntrenamiento().subscribe({
+    next: (res: { mensaje: RecomendacionEntrenamientoDTO }) => {
+      console.log("Respuesta completa de la API:", res);
+
+      if (res && res.mensaje) {
+        this.recomendacion = res.mensaje;
+        console.log("DTO recibido:", this.recomendacion);
+        console.log("Usuario ID:", this.recomendacion.usuarioId);
+        console.log("Nombre Completo:", this.recomendacion.nombreCompleto);
+        console.log("Edad:", this.recomendacion.edad);
+        console.log("Planes Recomendados (raw):", this.recomendacion.planesRecomendados);
+        console.log("Planes Recomendados (list):", this.recomendacion.planesRecomendados.split(', '));
+      } else {
+        console.warn("La respuesta no contiene la propiedad 'mensaje'");
+      }
+    },
+    error: (err) => {
+      console.error("Error al obtener la recomendación de entrenamiento:", err);
+    }
+  });
+}
+
+obtenerProgresoSemanal(): void {
+  this.clienteService.obtenerProgresoSemanal().subscribe({
+    next: (res: { mensaje: ProgresoSemanalDTO[] }) => {
+      console.log("Progreso semanal recibido:", res.mensaje);
+      this.progresoSemanal = res.mensaje;  // <-- Asigna los datos recibidos
+    },
+    error: (err) => {
+      console.error("Error al obtener el progreso semanal:", err);
+    }
+  });
+}
+
+
 }

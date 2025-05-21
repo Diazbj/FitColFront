@@ -51,5 +51,19 @@ export class ClienteService {
     return this.http.get<MensajeDTO>('http://localhost:8080/api/ciudades')
   }
 
+  obtenerRecomendacionEntrenamiento(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/recomendacion`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  obtenerProgresoSemanal(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/progreso-semanal`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
 
 }
