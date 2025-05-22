@@ -9,6 +9,7 @@ import { EntrenadoresDestacadosDTO } from '../../dto/entrenador/Entrenadores-des
 import { PlanDeficitDTO } from '../../dto/progreso/Planes-deficitdto';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { PlanDificultadDTO } from '../../dto/entrenador/plan-dificultaddto';
 
 @Component({
   selector: 'app-inicio-usuario',
@@ -22,6 +23,7 @@ export class InicioUsuarioComponent implements OnInit {
   errorMensaje: string | null = null;
   destacados:EntrenadoresDestacadosDTO[] = [];
   planDeficit:PlanDeficitDTO[] = [];
+  planDificultad: PlanDificultadDTO[] = [];
 
   // Chart.js config
   public barChartType: ChartType = 'bar';
@@ -52,6 +54,7 @@ export class InicioUsuarioComponent implements OnInit {
     this.cargarRanking();
     this.cargarEntrenadoresDestacados();
     this.obtenerPlanesDeficit();
+    this.listarPlanesPorDificultad();
   }
 
 
@@ -205,5 +208,48 @@ generarPDFRankingClientes(): void {
 
   //---------------------------------------------------------------------------Consulta Avanzada  3 ----------------------------------------------------
 
+   //---------------------------------------------------------------------------Consulta simple 1 ----------------------------------------------------
+
+
+  listarPlanesPorDificultad(): void {
+    this.entrenadorService.listarPlanesPorDificultad().subscribe({
+      next: (respuesta) => {
+        this.planDificultad = respuesta.mensaje || [];
+      },
+      error: (error) => {
+        console.error('Error al cargar los planes por dificultad', error);
+        this.errorMensaje = 'No se pudo cargar los planes por dificultad.';
+      }
+    });
+  }
+
+  generarPDFPlanesDificultad(): void {
+    if (!this.planDificultad || this.planDificultad.length === 0) {
+      console.warn("No hay planes por dificultad para exportar.");
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text('Planes Alimenticios por Dificultad', 14, 20);
+
+    const tablaDatos = this.planDificultad.map(plan => [
+      plan.nombre,
+      plan.dificultad,
+    ]);
+
+    autoTable(doc, {
+      startY: 30,
+      head: [['Nombre', 'Dificultad']],
+      body: tablaDatos,
+      styles: { fontSize: 9, halign: 'center' }
+    });
+
+    doc.save('planes_dificultad.pdf');
+  }
+
+
+   //---------------------------------------------------------------------------Consulta simple 1 ----------------------------------------------------
 
 }

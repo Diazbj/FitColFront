@@ -6,6 +6,8 @@ import { crearRutinaCompletaDTO } from '../../../dto/rutina/crear-rutina-complet
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EjercicioService } from '../../../servicios/ejercicio.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-rutinas',
@@ -124,23 +126,7 @@ export class RutinasComponent implements OnInit {
   }
 
 
-  cargarRutinas() {
-  this.rutinaService.listarRutinas().subscribe({
-    next: (resp: any) => {
-      console.log('Rutinas obtenidas:', resp.mensaje);
-      this.rutinas = resp.mensaje || [];
-
-      // Asegura que rutinaSeleccionada también se actualiza
-      if (this.rutinaSeleccionada && this.rutinaSeleccionada.codRutina) {
-        const actualizada = this.rutinas.find(r => r.codRutina === this.rutinaSeleccionada.codRutina);
-        if (actualizada) {
-          this.rutinaSeleccionada = actualizada;
-        }
-      }
-    },
-    error: err => console.error('Error cargando rutinas:', err)
-  });
-}
+  
 
   editarRutina(rutina: any) {
     rutina.backup = { ...rutina }; // copia de seguridad
@@ -253,5 +239,82 @@ eliminarAsignacion(ejercicio: any, rutina: any) {
 editarEjercicio(ejercicio: any) {
     alert('Función de edición no implementada');
   }
+
+  //---------------------------------------------------------------------------Consulta Simple 3 ----------------------------------------------------
+
+
+  cargarRutinas() {
+  this.rutinaService.listarRutinasEntrenador().subscribe({
+    next: (resp: any) => {
+      console.log('Rutinas obtenidas:', resp.mensaje);
+      this.rutinas = resp.mensaje || [];
+
+      // Asegura que rutinaSeleccionada también se actualiza
+      if (this.rutinaSeleccionada && this.rutinaSeleccionada.codRutina) {
+        const actualizada = this.rutinas.find(r => r.codRutina === this.rutinaSeleccionada.codRutina);
+        if (actualizada) {
+          this.rutinaSeleccionada = actualizada;
+        }
+      }
+    },
+    error: err => console.error('Error cargando rutinas:', err)
+  });
+}
+
+generarPDFRutinasEntrenador(): void {
+  if (!this.rutinas || this.rutinas.length === 0) {
+    console.warn("No hay rutinas disponibles para exportar.");
+    return;
+  }
+
+  const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.text('Rutinas del Entrenador', 14, 20);
+
+  let y = 30;
+
+  this.rutinas.forEach((rutina, index) => {
+    doc.setFontSize(12);
+    doc.text(`Rutina ${index + 1}: ${rutina.nombre}`, 14, y);
+    y += 6;
+    doc.setFontSize(10);
+    doc.text(`Código Rutina: ${rutina.codRutina}`, 14, y);
+    y += 6;
+    doc.text(`Código Plan Entrenamiento: ${rutina.codPlanEntrenamiento}`, 14, y);
+    y += 8;
+
+    if (rutina.ejercicios && rutina.ejercicios.length > 0) {
+      autoTable(doc, {
+        startY: y,
+        head: [['Nombre', 'Series', 'Repeticiones', 'Duración (min)', 'Descanso (seg)']],
+        body: rutina.ejercicios.map((e: any) => [
+          e.nombre,
+          e.series,
+          e.repeticiones,
+          e.duracion,
+          e.tiempoDescanso
+        ]),
+        styles: { fontSize: 8 },
+        margin: { left: 14, right: 14 }
+      });
+      y = (doc as any).lastAutoTable.finalY + 10;
+    } else {
+      doc.text('No hay ejercicios asociados.', 14, y);
+      y += 10;
+    }
+
+    // Salto de página si se pasa del límite
+    if (y > 260) {
+      doc.addPage();
+      y = 20;
+    }
+  });
+
+  doc.save('rutinas_entrenador.pdf');
+}
+
+
+//---------------------------------------------------------------------------Consulta Simple 3 ----------------------------------------------------
+
 
 }

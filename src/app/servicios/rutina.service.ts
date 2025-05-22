@@ -34,14 +34,14 @@ export class RutinaService {
         });
     }
 
-    listarRutinas(): Observable<MensajeDTO> {
+    listarRutinasEntrenador(): Observable<MensajeDTO> {
         const token = this.authService.getToken();
         return this.http.get<MensajeDTO>(`${this.apiUrl}/entrenador`, {
             headers: { Authorization: `Bearer ${token}` }
         });
     }
 
-    obtenerRutina(id: number): Observable<MensajeDTO> {
+    obtenerRutinaEjercicio(id: number): Observable<MensajeDTO> {
         const token = this.authService.getToken(); // Assuming you store the token in local storage
         return this.http.get<MensajeDTO>(`${this.apiUrl}/${id}`, {
             headers: { Authorization: `Bearer ${token}` }

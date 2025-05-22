@@ -7,6 +7,8 @@ import { EditarEntrenadorDTO } from '../../../dto/entrenador/editar-entrenador-d
 import { Router } from '@angular/router';
 import { AuthService } from '../../../servicios/auth.service';
 import { CertificadoEntrenadorDTO } from '../../../dto/entrenador/certificado-entrenadordto';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-perfil-entrenador',
@@ -95,6 +97,7 @@ export class PerfilEntrenadorComponent implements OnInit {
       telefonos: entrenador.telefonos ?? [],
     };
   }
+   //--------------------------------------------------------------------------- Consulta Intermedia 2----------------------------------------------------
 
     obtenerInformacionEntrenador() {
       this.entrenadorService.obtenerInformacionEntrenador().subscribe({
@@ -108,6 +111,37 @@ export class PerfilEntrenadorComponent implements OnInit {
       });
     }
 
+  
+generarPDFCertificadosEntrenador(): void {
+  if (!this.certificadoEntrenador || this.certificadoEntrenador.length === 0) {
+    console.warn("No hay certificados de entrenador para exportar.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text('Certificados del Entrenador', 14, 20);
+
+  const tablaDatos = this.certificadoEntrenador.map(cert => [
+    cert.usuarioId,
+    `${cert.aniosExperiencia} años`,
+    cert.nombreCertificado,
+    cert.institucionCertificado
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['ID Usuario', 'Años de Experiencia', 'Nombre del Certificado', 'Institución']],
+    body: tablaDatos,
+    styles: { fontSize: 9, halign: 'center' }
+  });
+
+  doc.save('certificados_entrenador.pdf');
+}
+
+
+ //--------------------------------------------------------------------------- Consulta Intermedia 2----------------------------------------------------
 
 
 

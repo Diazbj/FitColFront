@@ -63,4 +63,11 @@ export class EntrenadorService {
     });
   }
 
+  listarPlanesPorDificultad(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/planes/dificultad`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
 }

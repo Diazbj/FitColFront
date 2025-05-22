@@ -18,3 +18,13 @@
     background: linear-gradient(90deg, #2ca040 40%, #0e4970 100%);
     color: #fff !important;
 }
+
+.table-gradient-success {
+  background: linear-gradient(90deg, #198754 40%, #0f5132 100%) !important;
+  color: #fff !important;
+}
+
+.table-gradient-success th {
+  background: transparent !important;
+  color: #fff !important;
+}

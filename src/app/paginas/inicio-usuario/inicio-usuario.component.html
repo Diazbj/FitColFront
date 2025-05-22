@@ -82,6 +82,7 @@
           </div>
 
         </div>
+        
       </div>
 
       <button (click)="generarPDFEntrenadoresDestacados()" class="btn btn-gradient-success mt-3">
@@ -89,7 +90,6 @@
         Descargar Entrenadores Destacados en PDF
       </button>
     </div>
-
   </div>
 
   <!-- PLANES ALIMENTICIOS CON DÉFICIT -->
@@ -128,4 +128,42 @@
     <i class="fa-solid fa-file-pdf me-1"></i>
     Descargar Planes de Déficit en PDF
   </button>
+
+
+  <!-- PLANES POR DIFICULTAD -->
+<div class="mt-5">
+  <h4 class="mb-3 text-gradient-success text-center">
+    <i class="fas fa-layer-group me-2"></i>Planes por Dificultad
+  </h4>
+
+  <div *ngIf="planDificultad.length === 0" class="text-muted text-center">
+    No hay planes para mostrar.
+  </div>
+
+  <div *ngIf="planDificultad.length > 0" class="table-responsive">
+    <table class="table table-bordered table-hover table-striped shadow-sm">
+      <thead class="table-gradient-success">
+        <tr class="text-center">
+          <th>Nombre</th>
+          <th>Dificultad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let plan of planDificultad">
+          <td>{{ plan.nombre }}</td>
+          <td>{{ plan.dificultad }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center mt-3" *ngIf="planDificultad.length > 0">
+    <button (click)="generarPDFPlanesDificultad()" class="btn btn-gradient-success">
+      <i class="fa-solid fa-file-pdf me-1"></i>
+      Descargar Planes por Dificultad en PDF
+    </button>
+  </div>
+</div>
+
+
+
 </div>
