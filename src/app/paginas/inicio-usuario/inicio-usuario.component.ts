@@ -4,6 +4,11 @@ import { RankingClienteDTO } from '../../dto/progreso/rankingClientedto';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { EntrenadorService } from '../../servicios/entrenador.service';
+import { EntrenadoresDestacadosDTO } from '../../dto/entrenador/Entrenadores-destacadosdto';
+import { PlanDeficitDTO } from '../../dto/progreso/Planes-deficitdto';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-inicio-usuario',
@@ -15,6 +20,8 @@ import { CommonModule } from '@angular/common';
 export class InicioUsuarioComponent implements OnInit {
   ranking: RankingClienteDTO[] = [];
   errorMensaje: string | null = null;
+  destacados:EntrenadoresDestacadosDTO[] = [];
+  planDeficit:PlanDeficitDTO[] = [];
 
   // Chart.js config
   public barChartType: ChartType = 'bar';
@@ -39,11 +46,64 @@ export class InicioUsuarioComponent implements OnInit {
     }
   };
 
-  constructor(private progresoService: ProgresoService) {}
+  constructor(private progresoService: ProgresoService, private entrenadorService:EntrenadorService) {}
 
   ngOnInit(): void {
     this.cargarRanking();
+    this.cargarEntrenadoresDestacados();
+    this.obtenerPlanesDeficit();
   }
+
+
+  //---------------------------------------------------------------------------Consulta avanzada 2 ----------------------------------------------------
+
+  cargarEntrenadoresDestacados(): void {
+    this.entrenadorService.obtenerEntrenadoresDestacados().subscribe({
+      next: (respuesta) => {
+        this.destacados = respuesta.mensaje || [];
+      },
+      error: (error) => {
+        console.error('Error al cargar los entrenadores destacados', error);
+        this.errorMensaje = 'No se pudo cargar los entrenadores destacados.';
+      }
+    });
+  }
+
+
+ generarPDFEntrenadoresDestacados() {
+  if (!this.destacados || this.destacados.length === 0) {
+    console.warn("No hay entrenadores destacados para mostrar.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text('Entrenadores Destacados', 14, 20);
+
+  const tablaDatos = this.destacados.map(entrenador => [
+    entrenador.usuarioId,
+    `${entrenador.nombre} ${entrenador.apellido}`,
+    entrenador.cantidadPlanes.toString()
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['ID Usuario', 'Nombre Completo', 'Cantidad de Planes']],
+    body: tablaDatos,
+    styles: { halign: 'center' }
+  });
+
+  doc.save('entrenadores_destacados.pdf');
+}
+
+    
+
+
+  //---------------------------------------------------------------------------Consulta avanzada 2 ----------------------------------------------------
+
+
+  //---------------------------------------------------------------------------Consulta intermedia 4 ----------------------------------------------------
 
   cargarRanking(): void {
     this.progresoService.obtenerRanking().subscribe({
@@ -62,4 +122,88 @@ export class InicioUsuarioComponent implements OnInit {
       }
     });
   }
+
+
+generarPDFRankingClientes(): void {
+  if (!this.ranking || this.ranking.length === 0) {
+    console.warn("No hay datos de ranking para mostrar.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text('Ranking de Clientes - Entrenamientos Completados', 14, 20);
+
+  const tablaDatos = this.ranking.map(cliente => [
+    cliente.clienteId,
+    `${cliente.primerNombre} ${cliente.segundoApellido}`,
+    cliente.totalEntCompletos.toString()
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['ID Cliente', 'Nombre Completo', 'Entrenamientos Completados']],
+    body: tablaDatos,
+    styles: { halign: 'center' }
+  });
+
+  doc.save('ranking_clientes.pdf');
+}
+
+
+
+  //---------------------------------------------------------------------------Consulta intermedia 4 ----------------------------------------------------
+
+  //---------------------------------------------------------------------------Consulta Avanzada 3 ----------------------------------------------------
+
+  
+
+  obtenerPlanesDeficit(): void {
+    this.progresoService.obtenerPlanesDeficit().subscribe({
+      next: (respuesta) => {
+        this.planDeficit = respuesta.mensaje || [];
+      },
+      error: (error) => {
+        console.error('Error al cargar los planes de déficit', error);
+        this.errorMensaje = 'No se pudo cargar los planes de déficit.';
+      }
+    });
+  }
+
+
+  generarPDFPlanesDeficit(): void {
+  if (!this.planDeficit || this.planDeficit.length === 0) {
+    console.warn("No hay planes de déficit para exportar.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text('Planes Alimenticios con Déficit Calórico', 14, 20);
+
+  const tablaDatos = this.planDeficit.map(plan => [
+    plan.codPlanAlimenticio,
+    plan.nombrePlan,
+    plan.duracion + ' días',
+    plan.objetivo,
+    plan.nombreNutricionista,
+    plan.aniosExp + ' años',
+    plan.caloriasTotalesPlan + ' kcal'
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['Código', 'Nombre', 'Duración', 'Objetivo', 'Nutricionista', 'Experiencia', 'Calorías Totales']],
+    body: tablaDatos,
+    styles: { fontSize: 9, halign: 'center' }
+  });
+
+  doc.save('planes_deficit_calorico.pdf');
+}
+
+  //---------------------------------------------------------------------------Consulta Avanzada  3 ----------------------------------------------------
+
+
 }

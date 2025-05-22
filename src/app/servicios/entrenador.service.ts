@@ -48,4 +48,19 @@ export class EntrenadorService {
   obtenerCiudades(): Observable<MensajeDTO> {
     return this.http.get<MensajeDTO>('http://localhost:8080/api/ciudades');
   }
+
+  obtenerEntrenadoresDestacados(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/destacados`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  obtenerInformacionEntrenador(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/informacion`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
 }

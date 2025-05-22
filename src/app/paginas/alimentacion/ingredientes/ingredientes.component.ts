@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { IngredienteService } from '../../../servicios/ingrediente.service';
 import { MensajeDTO } from '../../../dto/mensaje-dto';
 import { ComidaService } from '../../../servicios/comida.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-ingredientes',
@@ -97,6 +99,8 @@ export class IngredientesComponent implements OnInit {
     });
   }
 
+//---------------------------------------------------------------------------Consulta Simple 1 ----------------------------------------------------
+
   obtenerIngredientesPorComida(id: number) {
     this.ingredienteService.obtenerIngredientesPorComida(id).subscribe({
       next: (resp: any) => {
@@ -106,6 +110,29 @@ export class IngredientesComponent implements OnInit {
       error: err => console.error('Error obteniendo ingredientes por comida:', err)
     });
   }
+
+  generarPDFIngredientes(codComida: number): void {
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text('Ingredientes de la Comida', 14, 22);
+
+  // Obtener los ingredientes filtrados
+  const ingredientesPDF = this.ingredientesFiltrados.map(ingrediente => [
+    ingrediente.nombre,
+    '$' + ingrediente.precioPromedio.toLocaleString('es-CO', { minimumFractionDigits: 2 })
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['Nombre', 'Precio']],
+    body: ingredientesPDF
+  });
+
+  doc.save(`ingredientes_comida_${codComida}.pdf`);
+}
+
+  //---------------------------------------------------------------------------Consulta Simple 1 ----------------------------------------------------
 
   asignarIngredienteAComida() {
     if (!this.ingredienteSeleccionado || !this.comidaSeleccionada) {

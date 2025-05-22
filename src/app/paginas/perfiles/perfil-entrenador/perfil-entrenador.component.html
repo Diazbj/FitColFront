@@ -1,96 +1,148 @@
 <div class="container py-5" *ngIf="usuario">
-    <div class="d-flex align-items-center mb-4">
-      <i class="fa-solid fa-id-badge fa-2x text-black me-2"></i>
-      <h4 class="mb-0">Perfil del Entrenador</h4>
-    </div>
-  
-    <div class="card shadow border-0">
-      <div class="card-body">
-        <div class="row g-4">
-          <!-- Cédula -->
-          <div class="col-md-6">
-            <div class="d-flex">
-              <i class="fa-solid fa-id-card fa-fw me-2 text-secondary"></i>
-              <div>
-                <small class="text-muted">Cédula</small>
-                <div>{{ usuario.usuarioId }}</div>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Nombre completo -->
-          <div class="col-md-6">
-            <div class="d-flex">
-              <i class="fa-solid fa-user fa-fw me-2 text-secondary"></i>
-              <div class="w-100">
-                <small class="text-muted">Nombre completo</small>
-                <div *ngIf="!editando">{{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }} {{ usuario.segundoApellido }}</div>
-                <div *ngIf="editando">
-                  <input [(ngModel)]="usuarioEditado.primerNombre" class="form-control mb-1" placeholder="primerNombre" />
-                  <input [(ngModel)]="usuarioEditado.segundoNombre" class="form-control mb-1" placeholder="segundoNombre" />
-                  <input [(ngModel)]="usuarioEditado.primerApellido" class="form-control mb-1" placeholder="primerApellido" />
-                  <input [(ngModel)]="usuarioEditado.segundoApellido" class="form-control" placeholder="segundoApellido" />
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- aniosExp -->
-            <div class="col-md-6">
-                <div class="d-flex">
-                    <i class="fa-solid fa-calendar fa-fw me-2 text-secondary"></i>
-                    <div class="w-100">
-                        <small class="text-muted">Años de experiencia</small>
-                        <div *ngIf="!editando">{{ usuario.aniosExp}}</div>
-                        <input *ngIf="editando" [(ngModel)]="usuarioEditado.aniosExp" class="form-control" placeholder="aniosExp" />
-                    </div>
-                </div>
-            </div>
+  <!-- Título -->
+  <div class="d-flex align-items-center mb-4">
+    <i class="fa-solid fa-id-badge fa-2x text-gradient-success me-2"></i>
+    <h4 class="mb-0 text-gradient-success">Perfil del Entrenador</h4>
+  </div>
 
-  
-          <!-- Email -->
-          <div class="col-md-6">
-            <div class="d-flex">
-              <i class="fa-solid fa-envelope fa-fw me-2 text-secondary"></i>
-              <div class="w-100">
-                <small class="text-muted">Email</small>
-                <div>{{ usuario.email }}</div> <!-- No editable -->
-              </div>
-            </div>
-          </div>
-  
-          <div class="col-md-6">
-            <div class="d-flex">
-              <i class="fa-solid fa-phone fa-fw me-2 text-secondary"></i>
-              <div class="w-100">
-                <small class="text-muted">Teléfonos</small>
-                <div *ngIf="!editando">
-                  <ul class="list-unstyled">
-                    <li *ngFor="let telefono of usuario.telefonos">{{ telefono }}</li>
-                  </ul>
-                </div>
-                <input *ngIf="editando" [(ngModel)]="telefonosString" class="form-control" placeholder="Separar por comas" />
-              </div>
-            </div>
-          </div>
-  
-          <!-- Botones -->
-          <div class="col-12 mt-4 d-flex justify-content-between">
+  <!-- Tarjeta de perfil -->
+  <div class="card shadow border-0">
+    <div class="card-body">
+      <div class="row g-4">
+
+        <!-- Cédula -->
+        <div class="col-md-6">
+          <div class="d-flex">
+            <i class="fa-solid fa-id-card fa-fw me-2 text-secondary"></i>
             <div>
-                <button *ngIf="!editando" class="btn btn-primary" (click)="activarEdicion()">Editar</button>
-                <div *ngIf="editando">
-                    <button class="btn btn-success me-2" (click)="actualizarEntrenador()">Guardar</button>
-                    <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
-                </div>
+              <small class="text-muted">Cédula</small>
+              <div>{{ usuario.usuarioId }}</div>
             </div>
-            <div>
-                <button *ngIf="!editando" class="btn btn-danger" (click)="eliminarEntrenador()">Eliminar Cuenta</button>
-            </div>
-
-
           </div>
         </div>
+
+        <!-- Nombre completo -->
+        <div class="col-md-6">
+          <div class="d-flex">
+            <i class="fa-solid fa-user fa-fw me-2 text-secondary"></i>
+            <div class="w-100">
+              <small class="text-muted">Nombre completo</small>
+              <div *ngIf="!editando">
+                {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }} {{
+                usuario.segundoApellido }}
+              </div>
+              <div *ngIf="editando">
+                <input [(ngModel)]="usuarioEditado.primerNombre" class="form-control mb-1"
+                  placeholder="Primer nombre" />
+                <input [(ngModel)]="usuarioEditado.segundoNombre" class="form-control mb-1"
+                  placeholder="Segundo nombre" />
+                <input [(ngModel)]="usuarioEditado.primerApellido" class="form-control mb-1"
+                  placeholder="Primer apellido" />
+                <input [(ngModel)]="usuarioEditado.segundoApellido" class="form-control"
+                  placeholder="Segundo apellido" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Años de experiencia -->
+        <div class="col-md-6">
+          <div class="d-flex">
+            <i class="fa-solid fa-calendar fa-fw me-2 text-secondary"></i>
+            <div class="w-100">
+              <small class="text-muted">Años de experiencia</small>
+              <div *ngIf="!editando">{{ usuario.aniosExp }}</div>
+              <input *ngIf="editando" [(ngModel)]="usuarioEditado.aniosExp" class="form-control"
+                placeholder="Años de experiencia" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-6">
+          <div class="d-flex">
+            <i class="fa-solid fa-envelope fa-fw me-2 text-secondary"></i>
+            <div class="w-100">
+              <small class="text-muted">Email</small>
+              <div>{{ usuario.email }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teléfonos -->
+        <div class="col-md-6">
+          <div class="d-flex">
+            <i class="fa-solid fa-phone fa-fw me-2 text-secondary"></i>
+            <div class="w-100">
+              <small class="text-muted">Teléfonos</small>
+              <div *ngIf="!editando">
+                <ul class="list-unstyled mb-0">
+                  <li *ngFor="let telefono of usuario.telefonos">{{ telefono }}</li>
+                </ul>
+              </div>
+              <input *ngIf="editando" [(ngModel)]="telefonosString" class="form-control"
+                placeholder="Separar por comas" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="col-12 mt-4 d-flex justify-content-between">
+          <div>
+            <button *ngIf="!editando" class="btn bg-gradient-success" (click)="activarEdicion()">Editar</button>
+            <div *ngIf="editando">
+              <button class="btn bg-gradient-success me-2" (click)="actualizarEntrenador()">Guardar</button>
+              <button class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+            </div>
+          </div>
+          <div>
+            <button *ngIf="!editando" class="btn btn-outline-danger" (click)="eliminarEntrenador()">Eliminar
+              Cuenta</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
-  
+
+  <!-- Certificados -->
+  <div class="mt-5">
+    <div class="d-flex align-items-center mb-3">
+      <i class="fa-solid fa-certificate fa-2x text-gradient-success me-2"></i>
+      <h4 class="mb-0 text-gradient-success">Certificados del Entrenador</h4>
+    </div>
+
+    <div *ngIf="certificadoEntrenador && certificadoEntrenador.length > 0; else sinCertificados">
+      <div *ngFor="let cert of certificadoEntrenador" class="card mb-3 shadow-sm border-0 bg-light">
+        <div class="card-body rounded">
+          <h5 class="card-title text-gradient-success mb-3">
+            <i class="fa-solid fa-award me-2"></i>{{ cert.nombreCertificado }}
+          </h5>
+
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="fa-solid fa-building-columns me-2 text-muted"></i>
+              <strong>Institución:</strong> {{ cert.institucionCertificado }}
+            </li>
+            <li class="mb-2">
+              <i class="fa-solid fa-briefcase me-2 text-muted"></i>
+              <strong>Años de experiencia:</strong> {{ cert.aniosExperiencia }}
+            </li>
+            <li>
+              <i class="fa-solid fa-id-card me-2 text-muted"></i>
+              <strong>ID del Usuario:</strong> {{ cert.usuarioId }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #sinCertificados>
+      <div class="alert alert-warning">
+        No hay certificados disponibles para este entrenador.
+      </div>
+    </ng-template>
+  </div>
+
+</div>

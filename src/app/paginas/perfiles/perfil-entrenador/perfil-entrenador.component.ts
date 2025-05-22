@@ -6,6 +6,7 @@ import { EntrenadorDTO } from '../../../dto/entrenador/entrenador-dto';
 import { EditarEntrenadorDTO } from '../../../dto/entrenador/editar-entrenador-dto';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../servicios/auth.service';
+import { CertificadoEntrenadorDTO } from '../../../dto/entrenador/certificado-entrenadordto';
 
 @Component({
   selector: 'app-perfil-entrenador',
@@ -18,12 +19,14 @@ export class PerfilEntrenadorComponent implements OnInit {
   usuario!: EntrenadorDTO;
   editando: boolean = false;
   usuarioEditado: EditarEntrenadorDTO = {} as EditarEntrenadorDTO;
+  certificadoEntrenador:CertificadoEntrenadorDTO[] = [];
 
   constructor(private router: Router, private authService: AuthService,private entrenadorService: EntrenadorService) {}
 
   telefonosString: string = '';
 
   ngOnInit(): void {
+    this.obtenerInformacionEntrenador();
     this.entrenadorService.obtenerEntrenador().subscribe({
       next: (res) => {
         const entrenador = res.mensaje;
@@ -92,6 +95,19 @@ export class PerfilEntrenadorComponent implements OnInit {
       telefonos: entrenador.telefonos ?? [],
     };
   }
+
+    obtenerInformacionEntrenador() {
+      this.entrenadorService.obtenerInformacionEntrenador().subscribe({
+        next: (res) => {
+          this.certificadoEntrenador = res.mensaje;
+          console.log('Certificado recibido:', res.mensaje);
+        },
+        error: (err) => {
+          console.error('Error al obtener certificado:', err);
+        }
+      });
+    }
+
 
 
 

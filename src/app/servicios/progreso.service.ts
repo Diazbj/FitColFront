@@ -19,4 +19,12 @@ export class ProgresoService {
             headers: { Authorization: `Bearer ${token}` }
         });
     }
+
+    obtenerPlanesDeficit(): Observable<MensajeDTO> {
+        const token = this.authService.getToken(); // Assuming you store the token in local storage
+        return this.http.get<MensajeDTO>(`${this.apiUrl}/planes-deficit`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+    }
+
 }

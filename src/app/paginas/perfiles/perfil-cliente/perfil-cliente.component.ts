@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RecomendacionEntrenamientoDTO } from '../../../dto/cliente/recomendacion-entrenamientodto';
 import { ProgresoSemanalDTO } from '../../../dto/cliente/progreso-semanaldto';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-perfil-cliente',
@@ -99,6 +101,8 @@ ngOnInit() {
 
   recomendacion: RecomendacionEntrenamientoDTO | null = null;
 
+
+//---------------------------------------------------------------------------Consulta avanzada 1 ----------------------------------------------------
 obtenerRecomendacionEntrenamiento() {
   console.log("Llamando al servicio de recomendación...");
 
@@ -124,6 +128,38 @@ obtenerRecomendacionEntrenamiento() {
   });
 }
 
+generarPDFRecomendacion() {
+  if (!this.recomendacion) {
+    console.warn("No hay recomendación para generar PDF.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text('Recomendación de Entrenamiento', 14, 20);
+
+  const body = [
+    ['Nombre Completo', this.recomendacion.nombreCompleto],
+    ['Edad', `${this.recomendacion.edad} años`],
+    ['Planes Recomendados', this.recomendacion.planesRecomendados.split(', ').join('\n')],
+  ];
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['Campo', 'Valor']],
+    body,
+    styles: { cellPadding: 2 },
+  });
+
+  doc.save('recomendacion_entrenamiento.pdf');
+}
+
+
+//---------------------------------------------------------------------------Consulta avanzada 1 ----------------------------------------------------
+
+//---------------------------------------------------------------------------Consulta intermedia 1 ----------------------------------------------------
+
 obtenerProgresoSemanal(): void {
   this.clienteService.obtenerProgresoSemanal().subscribe({
     next: (res: { mensaje: ProgresoSemanalDTO[] }) => {
@@ -135,6 +171,40 @@ obtenerProgresoSemanal(): void {
     }
   });
 }
+
+generarPDFProgresoSemanal() {
+  if (!this.progresoSemanal || this.progresoSemanal.length === 0) {
+    console.warn("No hay datos de progreso semanal para generar PDF.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text('Progreso Semanal', 14, 20);
+
+  const tableData = this.progresoSemanal.map((item) => [
+    new Date(item.semana).toLocaleDateString(), // Formatea fecha
+    `${item.pesoSemana} kg`,
+    item.imcSemana.toFixed(2),
+    item.entCompletosSemana
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['Semana', 'Peso', 'IMC', 'Entrenamientos Completos']],
+    body: tableData,
+    styles: { halign: 'center' }
+  });
+
+  doc.save('progreso_semanal.pdf');
+}
+
+
+
+
+
+//---------------------------------------------------------------------------Consulta intermedia 1 ----------------------------------------------------
 
 
 }

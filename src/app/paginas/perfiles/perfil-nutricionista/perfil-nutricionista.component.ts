@@ -6,6 +6,9 @@ import { EditarNutricionistaDTO } from '../../../dto/nutricionista/editar-nutric
 import { NutricionistaDTO } from '../../../dto/nutricionista/nutricionista-dto';
 import { NutricionistaService } from '../../../servicios/nutricionista.service';
 import { AuthService } from '../../../servicios/auth.service';
+import { ClienteSuscritoDTO } from '../../../dto/nutricionista/cliente-suscritodto';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-perfil-nutricionista',
@@ -18,11 +21,13 @@ export class PerfilNutricionistaComponent implements OnInit {
   usuario!: NutricionistaDTO;
   editando: boolean = false;
   usuarioEditado: EditarNutricionistaDTO = {} as EditarNutricionistaDTO;
+  clienteSuscrito:ClienteSuscritoDTO[] = [];
   constructor(private router: Router, private authService: AuthService, private nutricionistaService: NutricionistaService) { }
 
   telefonosString: string = '';
 
   ngOnInit(): void {
+    this.obtenerSuscritos();
     this.nutricionistaService.obtenerNutricionista().subscribe({
       next: (res) => {
         const nutricionista = res.mensaje;
@@ -94,4 +99,50 @@ export class PerfilNutricionistaComponent implements OnInit {
       aniosExp: nutricionista.aniosExp
     };
   }
+
+  //--------------------------------------------------------------------------- Consulta Intermedia 3----------------------------------------------------
+
+  obtenerSuscritos() {
+    this.nutricionistaService.obtenerSuscritos().subscribe({
+      next: (res) => {
+        this.clienteSuscrito = res.mensaje;
+        console.log('Clientes suscritos:', this.clienteSuscrito);
+      },
+      error: (err) => {
+        console.error('Error al obtener clientes suscritos:', err);
+      }
+    });
+  }
+
+  generarPDFClientesSuscritos(): void {
+  if (!this.clienteSuscrito || this.clienteSuscrito.length === 0) {
+    console.warn("No hay clientes suscritos para exportar.");
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text('Clientes Suscritos a Planes Alimenticios', 14, 20);
+
+  const tablaDatos = this.clienteSuscrito.map(cliente => [
+    cliente.usuarioId,
+    cliente.primerNombre + ' ' + cliente.primerApellido,
+    cliente.planAlimenticio,
+    cliente.nombreSuscripcion,
+    `$${cliente.precio.toFixed(2)}`,
+    `${cliente.duracion} días`
+  ]);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [['ID Usuario', 'Nombre', 'Plan Alimenticio', 'Suscripción', 'Precio', 'Duración']],
+    body: tablaDatos,
+    styles: { fontSize: 9, halign: 'center' }
+  });
+
+  doc.save('clientes_suscritos.pdf');
+}
+
+  //--------------------------------------------------------------------------- Consulta Intermedia 3 ----------------------------------------------------
 }

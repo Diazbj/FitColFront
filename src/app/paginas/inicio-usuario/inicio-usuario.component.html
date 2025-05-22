@@ -1,47 +1,131 @@
 <div class="container mt-4">
-  <h4 class="text-success text-center mb-4">
-    🏆 <strong>Top 5 Clientes más Activos</strong>
-  </h4>
 
-  <div *ngIf="errorMensaje" class="alert alert-danger text-center">
-    {{ errorMensaje }}
+  <!-- TÍTULOS DE SECCIÓN EN FILA -->
+  <div class="row mb-4">
+    <div class="col-md-6 text-center">
+      <h4 class="text-gradient-success">
+        <i class="fas fa-users me-2"></i><strong>Top 5 Clientes más Activos</strong>
+      </h4>
+    </div>
+    <div class="col-md-6 text-center">
+      <h4 class="text-gradient-success">
+        <i class="fas fa-dumbbell me-2"></i><strong>Entrenadores Destacados</strong>
+      </h4>
+    </div>
   </div>
 
-  <div *ngIf="ranking.length > 0; else sinRanking">
-    <div class="card p-4 shadow-sm rounded-4 border-0 bg-light">
-      <div *ngFor="let cliente of ranking; let i = index" class="mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-1 ">
-          <div class="d-flex align-items-center gap-2 ">
-            <span class="fs-5 fw-semibold ">
-              {{ i + 1 }}️⃣ {{ cliente.primerNombre }} {{ cliente.segundoApellido }}
-            </span>
-          </div>
-          <span class="badge text-bg-dark rounded-pill">
-            {{ cliente.totalEntCompletos }} entrenamientos
-          </span>
-        </div>
+  <!-- CUERPO DE SECCIONES EN FILA -->
+  <div class="row">
+    <!-- CLIENTES MÁS ACTIVOS -->
+    <div class="col-md-6">
+      <div *ngIf="errorMensaje" class="alert alert-danger text-center">
+        {{ errorMensaje }}
+      </div>
 
-        <div class="progress" style="height: 20px;">
-          <div
-            class="progress-bar bg-gradient-success"
-            [ngClass]="{
-              'bg-warning': i === 0,
-              'bg-secondary': i === 1,
-              'bg-info': i === 2,
-              'bg-success': i > 2
-            }"
-            role="progressbar"
-            [style.width.%]="(cliente.totalEntCompletos / ranking[0].totalEntCompletos) * 100"
-            [attr.aria-valuenow]="cliente.totalEntCompletos"
-            aria-valuemin="0"
-            [attr.aria-valuemax]="ranking[0].totalEntCompletos">
+      <div *ngIf="ranking.length > 0; else sinRanking">
+        <div class="card p-4 shadow-sm rounded-4 border-0 bg-light">
+          <div *ngFor="let cliente of ranking; let i = index" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-user-circle text-secondary"></i>
+                <span class="fs-6 fw-semibold">
+                  {{ i + 1 }}️⃣ {{ cliente.primerNombre }} {{ cliente.segundoApellido }}
+                </span>
+              </div>
+              <span class="badge  text-dark rounded-pill">
+                {{ cliente.totalEntCompletos }} entrenamientos
+              </span>
+            </div>
+
+            <div class="progress" style="height: 18px;">
+              <div class="progress-bar bg-gradient-success-2" role="progressbar"
+                [style.width.%]="(cliente.totalEntCompletos / ranking[0].totalEntCompletos) * 100"
+                [attr.aria-valuenow]="cliente.totalEntCompletos" aria-valuemin="0"
+                [attr.aria-valuemax]="ranking[0].totalEntCompletos">
+              </div>
+            </div>
+          </div>
+          <button (click)="generarPDFRankingClientes()" class="btn btn-gradient-success mt-3">
+            <i class="fa-solid fa-file-pdf me-1"></i>
+            Descargar Ranking en PDF
+          </button>
+        </div>
+      </div>
+
+      <ng-template #sinRanking>
+        <p class="text-muted text-center">No hay datos de ranking disponibles.</p>
+      </ng-template>
+    </div>
+
+    <!-- ENTRENADORES DESTACADOS -->
+    <div class="col-md-6">
+      <div *ngIf="destacados.length === 0 && !errorMensaje" class="text-muted text-center">
+        No hay entrenadores destacados para mostrar.
+      </div>
+
+      <div *ngIf="errorMensaje" class="alert alert-danger text-center">
+        {{ errorMensaje }}
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 g-3">
+        <div *ngFor="let entrenador of destacados" class="col">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title text-gradient-success mb-1">
+                <i class="fas fa-chalkboard-teacher me-2"></i>{{ entrenador.nombre }} {{ entrenador.apellido }}
+              </h6>
+              <p class="card-text small">
+                <i class="fas fa-id-badge me-1"></i><strong>ID:</strong> {{ entrenador.usuarioId }}<br>
+                <i class="fas fa-tasks me-1"></i><strong>Planes efectivos:</strong> {{ entrenador.cantidadPlanes }}
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <button (click)="generarPDFEntrenadoresDestacados()" class="btn btn-gradient-success mt-3">
+        <i class="fa-solid fa-file-pdf me-1"></i>
+        Descargar Entrenadores Destacados en PDF
+      </button>
+    </div>
+
+  </div>
+
+  <!-- PLANES ALIMENTICIOS CON DÉFICIT -->
+  <div class="mt-5">
+    <h4 class="mb-3 text-gradient-success">
+      <i class="fas fa-apple-alt me-2"></i>Planes alimenticios con déficit calorico
+    </h4>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" *ngFor="let plan of planDeficit">
+        <div class="card h-100 border-success shadow-sm">
+          <div class="card-header bg-gradient-success text-white">
+            <h6 class="card-title mb-0">
+              <i class="fas fa-utensils me-1"></i>{{ plan.nombrePlan }}
+            </h6>
+          </div>
+          <div class="card-body small">
+            <p><i class="fas fa-code me-1"></i><strong>Código:</strong> {{ plan.codPlanAlimenticio }}</p>
+            <p><i class="fas fa-clock me-1"></i><strong>Duración:</strong> {{ plan.duracion }} días</p>
+            <p><i class="fas fa-bullseye me-1"></i><strong>Objetivo:</strong> {{ plan.objetivo }}</p>
+            <p><i class="fas fa-user-md me-1"></i><strong>Nutricionista:</strong> {{ plan.nombreNutricionista }} ({{
+              plan.aniosExp }} )</p>
+            <p><i class="fas fa-hourglass-half me-1"></i><strong>Experiencia:</strong> {{ plan.aniosExp }} Años</p>
+            <p><i class="fas fa-fire me-1"></i><strong>Calorías:</strong> {{ plan.caloriasTotalesPlan }} kcal</p>
+          </div>
+          <div class="card-footer text-end">
+            <small class="text-muted"><i class="fas fa-user-tag me-1"></i>ID usuario: {{ plan.usuarioId }}</small>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <ng-template #sinRanking>
-    <p class="text-muted text-center">No hay datos de ranking disponibles.</p>
-  </ng-template>
+
+  </div>
+  <button (click)="generarPDFPlanesDeficit()" class="btn btn-gradient-success mt-3">
+    <i class="fa-solid fa-file-pdf me-1"></i>
+    Descargar Planes de Déficit en PDF
+  </button>
 </div>

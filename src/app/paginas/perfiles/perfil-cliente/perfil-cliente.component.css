@@ -14,3 +14,8 @@ canvas {
   width: 100% !important;
   height: 150px !important;
 }
+
+.btn-gradient-success {
+    background: linear-gradient(90deg, #2ca040 40%, #0e4970 100%);
+    color: #fff !important;
+}

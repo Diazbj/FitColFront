@@ -43,5 +43,12 @@ export class NutricionistaService {
     });
   }
 
+  obtenerSuscritos(): Observable<MensajeDTO> {
+    const token = this.authService.getToken();
+    return this.http.get<MensajeDTO>(`${this.apiUrl}/suscritos`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
 
 }
